@@ -1,0 +1,14 @@
+export const AD_START = "AD_START";
+export const AD_SUCCESS = "AD_SUCCESS";
+export const AD_FAIL = "AD_FAIL";
+export const ITEM_START = "ITEM_START";
+export const ITEM_SUCCESS = "ITEM_SUCCESS";
+export const ITEM_FAIL = "ITEM_FAIL";
+export const ADD_CART = "ADD_CART";
+export const DELETE_CART = "DELETE_CART";
+export const AUTH_START = "AUTH_START";
+export const AUTH_SUCCESS = "AUTH_SUCCESS";
+export const AUTH_FAIL = "AUTH_FAIL";
+export const AUTH_LOGOUT = "AUTH_LOGOUT";
+export const ERROR_CLEAR = "ERROR_CLEAR";
+export const CHECKOUT_PAYMENT_START = "CHECKOUT_PAYMENT_START";

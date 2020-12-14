@@ -1,0 +1,75 @@
+.main {
+  padding: 15px;
+}
+.addressMain {
+  color: "white";
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 900px;
+  margin: 30px 30px;
+}
+
+.input {
+  height: 40px;
+  width: 60%;
+  margin: 10px;
+  flex-basis: 80%;
+}
+
+.inputDiv {
+  border-radius: 3px;
+  width: 100%;
+  margin-bottom: 12px;
+  display: flex;
+}
+
+.sideText {
+  align-self: center;
+  flex-basis: 20%;
+}
+
+.priceList_items {
+  display: flex;
+}
+
+.buttonContainer {
+  width: 100%;
+  text-align: center;
+}
+
+.submitButton {
+  padding: 20px;
+  margin: 40px;
+  background-color: rgb(80, 118, 200);
+  color: white;
+  font-weight: 600;
+  font-size: large;
+  border: none;
+  border-radius: 2px 9px 2px;
+}
+
+.submitButton:disabled {
+  background-color: #cccccc;
+  color: #666666;
+}
+.submitButton:hover {
+  background-color: rgb(56, 83, 142);
+}
+
+@media only screen and (max-width: 600px) {
+  .addressMain {
+    width: 100%;
+    margin: auto;
+  }
+  .input {
+    width: 98%;
+    flex-basis: auto;
+    margin: 0;
+  }
+  .inputDiv {
+    flex-direction: column;
+    width: 90%;
+  }
+}
