@@ -3,6 +3,7 @@ import classes from "./Advertisement.module.css";
 import { connect } from "react-redux";
 import Loader from "../../components/Loader/Loader";
 import { adGetStarted } from "../../redux/actions/actionCreator";
+import AdvertisementImage from "../../util/images/advertismentImage.jpg";
 
 class Advertisement extends React.Component {
   componentDidMount() {
@@ -14,7 +15,7 @@ class Advertisement extends React.Component {
       page = (
         <div className={classes.main}>
           <p>{this.props.name}</p>
-          <img className={classes.Image} src={this.props.data.url} />
+          <img className={classes.Image} src={AdvertisementImage} />
         </div>
       );
     }
