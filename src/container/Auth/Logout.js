@@ -6,7 +6,7 @@ import { logout } from "../../redux/actions/actionCreator";
 const Login = (props) => {
   useEffect(() => {
     props.logout();
-  }, []);
+  }, [props]);
   return (
     <div>
       <Redirect to="/" />

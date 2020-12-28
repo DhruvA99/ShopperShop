@@ -46,11 +46,11 @@ class ItemPage extends React.Component {
     return (
       <div>
         <NavBar />
-        {console.log(this.props.location.state)}
+
         <div className={classes.main}>
           <div className={classes.container}>
             <div className={classes.itemImage}>
-              <img src={url} />
+              <img src={url} alt="img" />
             </div>
             <div className={classes.Iteminfo}>
               <h2
@@ -88,11 +88,15 @@ class ItemPage extends React.Component {
                           {item}
                         </option>
                       );
+                    } else {
+                      return null;
                     }
                   })}
                 </select>
               </div>
               <br />
+              <h3 className={classes.price}>PRICE: &#8377;{price}</h3>
+
               <div className={classes.buttonGroup}>
                 <button
                   onClick={this.onClickHandler}

@@ -23,7 +23,6 @@ export const adGetStarted = () => (dispatch) => {
       dispatch(adSuccess(res.data.ad1));
     })
     .catch((error) => {
-      console.log(error);
       dispatch(adFail(error.message));
     });
 };
@@ -135,7 +134,6 @@ export const checkAuthTimeout = (expiryTime) => (dispatch) => {
 export const checkAuthState = () => (dispatch) => {
   const token = localStorage.getItem("token");
   if (!token) {
-    console.log("checkauthstate no token found");
     dispatch(logout());
   } else {
     const ExpDate = new Date(localStorage.getItem("expirationDate"));

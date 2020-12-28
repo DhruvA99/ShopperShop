@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import Navbar from "../../../components/Navigation/Navbar";
 import {
   authGetStarted,
-  clearError,
+  errorClear,
 } from "../../../redux/actions/actionCreator";
 
 const validEmailRegex = RegExp(
@@ -24,7 +24,9 @@ class Login extends React.Component {
     isValid: false,
   };
 
-  componentDidMount() {}
+  componentDidMount() {
+    this.props.errorClear();
+  }
 
   onChangeHandler = (e) => {
     const { name, value } = e.target;
@@ -80,7 +82,7 @@ class Login extends React.Component {
                   placeholder="Email"
                   onChange={(event) => this.onChangeHandler(event)}
                 />
-                <spam>{this.state.error.email}</spam>
+                <span>{this.state.error.email}</span>
               </div>
               <div className={classes.inputDiv}>
                 <input
@@ -90,7 +92,7 @@ class Login extends React.Component {
                   placeholder="Password"
                   onChange={(event) => this.onChangeHandler(event)}
                 />
-                <spam>{this.state.error.password}</spam>
+                <span>{this.state.error.password}</span>
               </div>
               <div className={classes.buttonDiv}>
                 <button
@@ -129,6 +131,9 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   authGetStarted: (email, password, isSignUp) => {
     dispatch(authGetStarted(email, password, isSignUp));
+  },
+  errorClear: () => {
+    dispatch(errorClear());
   },
 });
 

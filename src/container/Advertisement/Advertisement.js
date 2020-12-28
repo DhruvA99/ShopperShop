@@ -15,7 +15,7 @@ class Advertisement extends React.Component {
       page = (
         <div className={classes.main}>
           <p>{this.props.name}</p>
-          <img className={classes.Image} src={AdvertisementImage} />
+          <img className={classes.Image} src={AdvertisementImage} alt="img" />
         </div>
       );
     }
