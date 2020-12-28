@@ -75,7 +75,7 @@ class ItemPage extends React.Component {
               <p style={{ paddingLeft: "20px" }}>BRAND: {brand}</p>
               <br />
               <div className={classes.selectSize}>
-                <p>size</p>
+                <p style={{ marginRight: "12px" }}>size</p>
                 <select onClick={this.handleSelectChange}>
                   <option hidden disabled selected value>
                     {" "}

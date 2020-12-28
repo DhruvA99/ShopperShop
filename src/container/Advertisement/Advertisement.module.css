@@ -4,7 +4,7 @@
   box-shadow: 0 3px 3px 0 rgba(0, 0, 0, 0.8);
 }
 .main {
-  margin: 10px 0;
+  margin: 10px 5px;
 }
 
 @media screen and (max-width: 480px) {
