@@ -10,7 +10,9 @@ const Navbar = (props) => {
     <div>
       <nav className={classes.mainNav}>
         <div className={classes.logo}>
-          <img src={LogoImage} alt="Logo" onClick={() => setDrawer(!drawer)} />
+          <span onClick={() => setDrawer(!drawer)}>
+            shopper<span className={classes.innerText}>shop</span>
+          </span>
         </div>
         <ul className={`${classes.navList}  ${drawer ? null : classes.remove}`}>
           <NavLink className={classes.item} to="/">
