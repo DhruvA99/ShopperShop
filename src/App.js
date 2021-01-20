@@ -7,12 +7,14 @@ import Logout from "./container/Auth/Logout";
 import SignUp from "./container/Auth/SignUp/SignUp";
 import { useEffect } from "react";
 import { connect } from "react-redux";
-import { checkAuthState } from "./redux/actions/actionCreator";
+import { checkAuthState, CartItemCheck } from "./redux/actions/actionCreator";
 import Payment from "./container/Payment/Payment";
+import WishList from "./container/WishList/WishList";
 
 function App(props) {
   useEffect(() => {
     props.authGetStarted();
+    props.cartItemCheck();
   }, []);
   let routes = (
     <Switch>
@@ -32,6 +34,7 @@ function App(props) {
         <Route path="/item/:id" exact component={ItemPage} />
         <Route path="/checkout" exact component={CartPage} />
         <Route path="/payment" exact component={Payment} />
+        <Route path="/wishlist" exact component={WishList} />
         <Redirect to="/" />
       </Switch>
     );
@@ -46,6 +49,9 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   authGetStarted: () => {
     dispatch(checkAuthState());
+  },
+  cartItemCheck: () => {
+    dispatch(CartItemCheck());
   },
 });
 

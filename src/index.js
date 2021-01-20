@@ -11,6 +11,7 @@ import thunk from "redux-thunk";
 import itemReducer from "./redux/reducers/itemReducer";
 import cartReducer from "./redux/reducers/cartReducer";
 import authReducer from "./redux/reducers/authReducer";
+import wishlistReducer from "./redux/reducers/wishlistReducer";
 
 const composeEnhancers =
   typeof window === "object" && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
@@ -29,6 +30,7 @@ const combinedReducer = combineReducers({
   cart: cartReducer,
   ad: adReducer,
   item: itemReducer,
+  wishlist: wishlistReducer,
 });
 
 const store = createStore(combinedReducer, enhancer);

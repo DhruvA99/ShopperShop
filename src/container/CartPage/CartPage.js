@@ -20,7 +20,7 @@ class CartPage extends React.Component {
   handleDeleteButton = (id, price) => {
     console.log(price);
     if (window.confirm("do you want to delete the selected item?")) {
-      this.props.deleteItemCart(id, this.props.items, price);
+      this.props.deleteItemCart(id, price);
     }
   };
 

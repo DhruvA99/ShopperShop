@@ -54,17 +54,48 @@ export const itemGetStarted = () => (dispatch) => {
     });
 };
 
-export const addItemCart = (data) => ({
-  type: actionTypes.ADD_CART,
-  payload: data,
-});
+//cart
 
-export const deleteItemCart = (id, items, price) => (dispatch) => {
-  let filteredArray = items.filter((key) => key.id !== id);
+export const CartItemCheck = () => (dispatch) => {
+  if (
+    !localStorage.getItem("CartItems") &&
+    !localStorage.getItem("TotalPrice")
+  ) {
+    console.log("cartitemcheckStart");
+    localStorage.setItem("CartItems", JSON.stringify([]));
+    localStorage.setItem("TotalPrice", JSON.stringify(0));
+  } else {
+    console.log("cartitemcheckalreadypresent");
+    let ls = JSON.parse(localStorage.getItem("CartItems"));
+    let tp = parseInt(JSON.parse(localStorage.getItem("TotalPrice")));
+    dispatch({ type: actionTypes.ADD_CART, payload: tp, ls: ls });
+  }
+};
 
+export const addItemCart = (data) => (dispatch) => {
+  let ls = JSON.parse(localStorage.getItem("CartItems"));
+  let tp = parseInt(JSON.parse(localStorage.getItem("TotalPrice")));
+  ls = [...ls, data];
+  localStorage.setItem("CartItems", JSON.stringify(ls));
+  localStorage.setItem("TotalPrice", tp + data.price);
+  ls = JSON.parse(localStorage.getItem("CartItems"));
+  dispatch({
+    type: actionTypes.ADD_CART,
+    payload: data.price,
+    ls: ls,
+  });
+};
+
+export const deleteItemCart = (id, price) => (dispatch) => {
+  let ls = JSON.parse(localStorage.getItem("CartItems"));
+  let tp = parseInt(JSON.parse(localStorage.getItem("TotalPrice")));
+  ls = ls.filter((key) => key.id !== id);
+  localStorage.setItem("CartItems", JSON.stringify(ls));
+  localStorage.setItem("TotalPrice", tp - price);
+  ls = JSON.parse(localStorage.getItem("CartItems"));
   dispatch({
     type: actionTypes.DELETE_CART,
-    payload: filteredArray,
+    payload: ls,
     price: price,
   });
 };
@@ -151,4 +182,40 @@ export const checkAuthState = () => (dispatch) => {
 
 export const checkoutPaymentStart = () => ({
   type: actionTypes.CHECKOUT_PAYMENT_START,
+});
+
+//Wish List
+
+export const wishListSendData = (data) => (dispatch) => {
+  dispatch({ type: actionTypes.WISHLIST_SEND_START });
+  axios
+    .post(
+      `https://shoppershop-bcc2c.firebaseio.com/wishlist/${data.userId}/${data.id}`,
+      data
+    )
+    .then((res) => {
+      console.log(res.data);
+      dispatch({ type: actionTypes.WISHLIST_SEND_START });
+    })
+    .catch((err) => {
+      console.log(err.message);
+      dispatch({ type: actionTypes.WISHLIST_SEND_FAIL });
+    });
+};
+
+export const wishlistSendSuccess = () => ({
+  type: actionTypes.WISHLIST_SEND_SUCCESS,
+});
+export const wishlistSendFail = () => ({
+  type: actionTypes.WISHLIST_SEND_FAIL,
+});
+
+export const wishlistSuccess = (data) => ({
+  type: actionTypes.WISHLIST_SUCCESS,
+  payload: data,
+});
+
+export const wishlistFail = (err) => ({
+  type: actionTypes.WISHLIST_FAIL,
+  payload: err.message,
 });

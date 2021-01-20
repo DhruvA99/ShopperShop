@@ -2,7 +2,10 @@ import React from "react";
 import NavBar from "../../components/Navigation/Navbar";
 import classes from "./ItemPage.module.css";
 import Reviews from "../../components/Reviews/Reviews";
-import { addItemCart } from "../../redux/actions/actionCreator";
+import {
+  addItemCart,
+  wishListSendData,
+} from "../../redux/actions/actionCreator";
 import { connect } from "react-redux";
 import Footer from "../../components/Footer/Footer";
 
@@ -11,7 +14,8 @@ class ItemPage extends React.Component {
     size: null,
   };
 
-  onClickHandler = () => {
+  onCartClickHandler = () => {
+    //checking if the user has selected a size
     if (this.state.size !== null) {
       const data = {
         id: this.props.location.state.id + this.state.size,
@@ -25,6 +29,18 @@ class ItemPage extends React.Component {
     } else {
       alert("please select a size!");
     }
+  };
+
+  onWishListClickHandler = () => {
+    const data = {
+      id: this.props.location.state.id,
+      prodId: this.props.location.state.id,
+      name: this.props.location.state.name,
+      url: this.props.location.state.url,
+      price: this.props.location.state.price,
+    };
+    this.props.wishListSendData(data);
+    this.props.history.push("/wishlist");
   };
 
   handleSelectChange = (e) => {
@@ -104,6 +120,12 @@ class ItemPage extends React.Component {
                 >
                   ADD TO CART
                 </button>
+                <button
+                  onClick={this.onCartClickHandler}
+                  className={classes.button}
+                >
+                  ADD TO WISHLIST
+                </button>
               </div>
             </div>
 
@@ -126,11 +148,16 @@ class ItemPage extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => ({});
+const mapStateToProps = (state) => ({
+  userId: state.auth.userId,
+});
 
 const mapDispatchToProps = (dispatch) => ({
   addItemCart: (data) => {
     dispatch(addItemCart(data));
+  },
+  wishListSendData: (data) => {
+    dispatch(wishListSendData(data));
   },
 });
 
