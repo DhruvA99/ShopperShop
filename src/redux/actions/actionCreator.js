@@ -186,20 +186,20 @@ export const checkoutPaymentStart = () => ({
 
 //Wish List
 
-export const wishListSendData = (data) => (dispatch) => {
+export const wishListSendData = (data, token) => (dispatch) => {
   dispatch({ type: actionTypes.WISHLIST_SEND_START });
   axios
     .post(
-      `https://shoppershop-bcc2c.firebaseio.com/wishlist/${data.userId}/${data.id}`,
+      `https://shoppershop-bcc2c.firebaseio.com/wishlist/${data.userId}.json?auth=${token}`,
       data
     )
     .then((res) => {
       console.log(res.data);
-      dispatch({ type: actionTypes.WISHLIST_SEND_START });
+      dispatch(wishlistSendSuccess());
     })
     .catch((err) => {
-      console.log(err.message);
-      dispatch({ type: actionTypes.WISHLIST_SEND_FAIL });
+      console.log(err);
+      dispatch(wishlistSendFail());
     });
 };
 
@@ -210,6 +210,22 @@ export const wishlistSendFail = () => ({
   type: actionTypes.WISHLIST_SEND_FAIL,
 });
 
+export const wishlistData = (userId, authToken) => (dispatch) => {
+  dispatch({ type: actionTypes.WISHLIST_START });
+  axios
+    .get(
+      `https://shoppershop-bcc2c.firebaseio.com/wishlist/${userId}.json?auth=${authToken}`
+    )
+    .then((res) => {
+      console.log("wishlistdata action called ");
+      dispatch(wishlistSuccess(res.data));
+    })
+    .catch((err) => {
+      console.log(err);
+      dispatch(wishlistFail(err.message));
+    });
+};
+
 export const wishlistSuccess = (data) => ({
   type: actionTypes.WISHLIST_SUCCESS,
   payload: data,
@@ -219,3 +235,17 @@ export const wishlistFail = (err) => ({
   type: actionTypes.WISHLIST_FAIL,
   payload: err.message,
 });
+
+export const wishlistDeleteData = (userId, postId, authToken) => (dispatch) => {
+  axios
+    .delete(
+      `https://shoppershop-bcc2c.firebaseio.com/wishlist/${userId}/${postId}.json?auth=${authToken}`
+    )
+    .then((res) => {
+      console.log(res.data);
+      dispatch(wishlistData(userId, authToken));
+    })
+    .catch((err) => {
+      console.log(err.message);
+    });
+};
