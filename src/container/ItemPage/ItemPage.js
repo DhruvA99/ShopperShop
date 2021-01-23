@@ -17,27 +17,25 @@ class ItemPage extends React.Component {
     firstRender: true,
     wishlistDisableHandlerCheck: false,
   };
-  componentDidMount() {
-    this.setState({ firstRender: true });
-    this.wishListDataCallHandler();
-  }
+  // componentDidMount() {
+  //   if (this.props.authToken !== null) {
+  //     this.props.wishlistData(this.props.userId, this.props.authToken);
+  //   }
+  // }
 
   wishListDataCallHandler = () => {
-    if (this.props.authToken !== null && this.state.firstRender) {
-      console.log("call 1");
+    if (this.props.authToken !== null) {
       this.props.wishlistData(this.props.userId, this.props.authToken);
       this.setState({ firstRender: false });
     }
   };
 
   wishListDisableHandler = () => {
-    console.log("call 2 outside");
     if (
       this.props.authToken !== null &&
       !this.state.wishlistDisableHandlerCheck &&
-      this.state.items !== null
+      this.props.items !== null
     ) {
-      console.log("call 2 inside");
       let wishlistButtonDisable = Object.keys(this.props.items).find(
         (key) => this.props.items[key].id === this.props.location.state.id
       )
@@ -99,19 +97,22 @@ class ItemPage extends React.Component {
       price,
       size,
     } = this.props.location.state;
-
-    let page = (
+    if (this.props.wishlistLoading && this.state.firstRender) {
+      //this will only be executed once when loading is true and firstRender is set to true
+      this.wishListDataCallHandler();
+      console.log("wishlist data call handler inside render ");
+    }
+    if (
+      !this.props.wishlistLoading &&
+      !this.state.wishlistDisableHandlerCheck
+    ) {
+      //this will only be executed once(till wishlistdisablehandlercheck is set to true) for componentDidMount
+      this.wishListDisableHandler();
+    }
+    return (
       <>
-        {!this.props.check ? this.wishListDataCallHandler() : null}
-        <p>Loading....</p>
-      </>
-    );
-
-    if (!this.props.wishlistLoading) {
-      page = (
+        {" "}
         <div>
-          {!this.props.check ? this.wishListDisableHandler() : null}
-
           <NavBar />
           <div className={classes.main}>
             <div className={classes.container}>
@@ -142,11 +143,11 @@ class ItemPage extends React.Component {
                 <br />
                 <div className={classes.selectSize}>
                   <p style={{ marginRight: "12px" }}>size</p>
-                  <select onClick={this.handleSelectChange}>
-                    <option hidden disabled selected value>
-                      {" "}
-                      -- select an option --{" "}
-                    </option>
+                  <select
+                    onClick={this.handleSelectChange}
+                    defaultValue="-- select an option --"
+                  >
+                    <option disabled> -- select an option -- </option>
                     {Object.keys(size).map((item) => {
                       if (size[item]) {
                         return (
@@ -201,9 +202,8 @@ class ItemPage extends React.Component {
           <br />
           <Footer />
         </div>
-      );
-    }
-    return <>{page}</>;
+      </>
+    );
   }
 }
 
