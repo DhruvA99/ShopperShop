@@ -1,5 +1,18 @@
 .main {
   padding: 15px;
+  background-color: #ecebeb;
+  border-radius: 5px;
+  width: 90%;
+  margin: 100px auto;
+}
+.heading {
+  display: block;
+  width: 100%;
+  padding: 20px;
+  font-size: 2em;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-align: left;
 }
 .addressMain {
   color: "white";
@@ -7,15 +20,16 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  width: 900px;
+  width: 90%;
   margin: 30px 30px;
 }
 
 .input {
-  height: 40px;
-  width: 60%;
+  height: 47px;
+  width: 100%;
   margin: 10px;
   flex-basis: 80%;
+  box-sizing: border-box;
 }
 
 .inputDiv {
@@ -25,8 +39,16 @@
   display: flex;
 }
 
+.insideInputDiv {
+  width: 60%;
+  margin: 10px;
+  flex-basis: 80%;
+}
+
 .sideText {
   align-self: center;
+  justify-content: center;
+  padding-left: 10px;
   flex-basis: 20%;
 }
 
@@ -45,6 +67,7 @@
   background-color: rgb(80, 118, 200);
   color: white;
   font-weight: 600;
+  transition: all 0.6s;
   font-size: large;
   border: none;
   border-radius: 2px 9px 2px;
@@ -55,7 +78,20 @@
   color: #666666;
 }
 .submitButton:hover {
-  background-color: rgb(56, 83, 142);
+  color: white;
+  background-color: rgb(111, 135, 187);
+}
+
+.paymentContainer {
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+  max-width: 900px;
+  margin: 30px 30px 30px 18px;
+}
+
+.cardDetailsContainer {
+  display: flex;
 }
 
 @media only screen and (max-width: 600px) {
@@ -63,13 +99,19 @@
     width: 100%;
     margin: auto;
   }
+  .paymentContainer {
+    width: 100%;
+    margin: auto;
+  }
   .input {
     width: 98%;
     flex-basis: auto;
-    margin: 0;
   }
   .inputDiv {
     flex-direction: column;
+    width: 90%;
+  }
+  .cardDetailsContainer {
     width: 90%;
   }
 }
