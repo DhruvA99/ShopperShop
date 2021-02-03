@@ -52,7 +52,10 @@ class ItemPage extends React.Component {
     //checking if the user has selected a size
     if (this.state.size !== null) {
       const data = {
-        id: this.props.location.state.id + this.state.size,
+        id:
+          this.props.location.state.id +
+          this.state.size +
+          new Date().getSeconds(),
         name: this.props.location.state.name,
         url: this.props.location.state.url,
         size: this.state.size,

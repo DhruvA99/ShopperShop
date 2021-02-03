@@ -249,3 +249,56 @@ export const wishlistDeleteData = (userId, postId, authToken) => (dispatch) => {
       console.log(err.message);
     });
 };
+
+export const orderStart = (data, userId, authToken) => (dispatch) => {
+  dispatch({ type: actionTypes.ORDER_START });
+  axios
+    .post(
+      `https://shoppershop-bcc2c.firebaseio.com/orders/${userId}.json?auth=${authToken}`,
+      data
+    )
+    .then((res) => {
+      console.log(res);
+      dispatch(orderSuccess(data));
+    })
+    .catch((err) => {
+      console.log(err);
+      dispatch(orderFail(err.message));
+    });
+};
+
+export const orderSuccess = (data) => ({
+  type: actionTypes.ORDER_SUCCESS,
+  payload: data,
+});
+
+export const orderFail = (err) => ({
+  type: actionTypes.ORDER_FAIL,
+  payload: err,
+});
+
+export const orderFetchStart = (userId, authToken) => (dispatch) => {
+  dispatch({ type: actionTypes.ORDER_FETCH_START });
+  axios
+    .get(
+      `https://shoppershop-bcc2c.firebaseio.com/orders/${userId}.json?auth=${authToken}`
+    )
+    .then((res) => {
+      dispatch(orderFetchSuccess(res.data));
+      console.log("orderFetchStart called ", res.data);
+    })
+    .catch((err) => {
+      dispatch(orderFetchFail(err.message));
+      console.log(err);
+    });
+};
+
+export const orderFetchSuccess = (data) => ({
+  type: actionTypes.ORDER_FETCH_SUCCESS,
+  payload: data,
+});
+
+export const orderFetchFail = (error) => ({
+  type: actionTypes.ORDER_FETCH_FAIL,
+  payload: error,
+});

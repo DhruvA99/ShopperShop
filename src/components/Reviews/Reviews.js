@@ -11,7 +11,10 @@ const Reviews = (props) => {
         <span key={props.reviews[key].name + index + ind}>&#9733;</span>
       ));
       return (
-        <div className={classes.main}>
+        <div
+          className={classes.main}
+          key={new Date().getMilliseconds() + index}
+        >
           <h3>{props.reviews[key].name}</h3>
           {card}
           <p>{props.reviews[key].review}</p>

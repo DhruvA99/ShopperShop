@@ -24,6 +24,15 @@
   margin: 30px 30px;
 }
 
+.cardsIconContainer {
+  display: flex;
+  justify-content: center;
+}
+
+i {
+  padding: 10px;
+}
+
 .input {
   height: 47px;
   width: 100%;

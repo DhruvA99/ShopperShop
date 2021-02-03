@@ -3,6 +3,8 @@ import classes from "./Payment.module.css";
 import { CountryDropdown, RegionDropdown } from "react-country-region-selector";
 import Navbar from "../../components/Navigation/Navbar";
 import { connect } from "react-redux";
+import { orderStart } from "../../redux/actions/actionCreator";
+import "font-awesome/css/font-awesome.min.css";
 
 var reg = /^\d+$/;
 
@@ -11,14 +13,14 @@ class Payment extends React.Component {
     addLine1: "",
     addLine2: "",
     addLine3: "",
-    zipcode: null,
+    zipcode: "",
     country: "",
     region: "",
-    mobileNo: null,
+    mobileNo: "",
     cardName: "",
     cardNo: "",
-    expMonth: null,
-    expYear: null,
+    expMonth: "",
+    expYear: "",
     cvv: "",
     isValid: false,
     error: {
@@ -110,10 +112,10 @@ class Payment extends React.Component {
       errors.expYear === "" &&
       errors.cvv === "" &&
       this.state.addLine1 !== null &&
-      this.state.zipcode !== null &&
+      this.state.zipcode !== "" &&
       this.state.country !== null &&
       this.state.region !== null &&
-      this.state.mobileNo !== null &&
+      this.state.mobileNo !== "" &&
       this.state.cardNo !== null &&
       this.state.cardName !== null &&
       this.state.expMonth !== null &&
@@ -132,6 +134,22 @@ class Payment extends React.Component {
   selectRegion(val) {
     this.setState({ region: val });
   }
+
+  onPaymentHandler = () => {
+    let data = {
+      list: this.props.finalList,
+      cardDetails: {
+        cardName: this.state.cardName,
+        cardNo: this.state.cardNo,
+        expMonth: this.state.expMonth,
+        expYear: this.state.expYear,
+        cvv: this.state.cvv,
+      },
+      discount: this.props.discount,
+      totalPrice: this.props.finalTotalPrice,
+    };
+    this.props.orderStart(data, this.props.userId, this.props.authToken);
+  };
 
   render() {
     let List = this.props.finalList.map((item) => {
@@ -236,8 +254,32 @@ class Payment extends React.Component {
             <div className={classes.paymentContainer}>
               <span className={classes.heading}>PAYMENT</span>
               <div className={classes.paymentContainer}>
-                <span className={classes.sideText}>Accepted Cards</span>
-                <div className={classes.cardsIconContainer}></div>
+                <span className={classes.sideText}>
+                  <b>Accepted Cards</b>
+                </span>
+                <div className={classes.cardsIconContainer}>
+                  <i
+                    className="fa fa-cc-visa fa-2x"
+                    style={{ color: "#243891" }}
+                    aria-hidden="true"
+                  ></i>
+                  <i
+                    className="fa fa-cc-amex fa-2x"
+                    style={{ color: "#0000ff" }}
+                    aria-hidden="true"
+                  ></i>
+                  <i
+                    className="fa fa-cc-mastercard fa-2x"
+                    aria-hidden="true"
+                    style={{ color: "#e5041b" }}
+                  ></i>
+
+                  <i
+                    className="fa fa-cc-discover fa-2x"
+                    style={{ color: "#fdbb7d" }}
+                    aria-hidden="true"
+                  ></i>
+                </div>
                 <div className={classes.inputDiv}>
                   <span className={classes.sideText}>Name on Card</span>
                   <div className={classes.insideInputDiv}>
@@ -400,6 +442,7 @@ class Payment extends React.Component {
             <button
               disabled={!this.state.isValid}
               className={classes.submitButton}
+              onClick={this.onPaymentHandler}
             >
               PaymentDetails
             </button>
@@ -414,6 +457,14 @@ const mapStateToProps = (state) => ({
   finalList: state.cart.finalItemList,
   discount: state.cart.discount,
   finalTotalPrice: state.cart.finalTotalPrice,
+  userId: state.auth.userId,
+  authToken: state.auth.authToken,
 });
 
-export default connect(mapStateToProps, null)(Payment);
+const mapDispatchToProps = (dispatch) => ({
+  orderStart: (data, userId, authToken) => {
+    dispatch(orderStart(data, userId, authToken));
+  },
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Payment);

@@ -1,0 +1,19 @@
+.main {
+  padding: 2em;
+  margin: 1em;
+  background-color: rgb(241, 241, 241);
+}
+
+.heading {
+  font-size: 1.4em;
+  font-weight: 600;
+}
+
+.container {
+}
+
+.itemContainer {
+  margin: 2em;
+  padding: 1em;
+  background-color: rgb(230, 230, 230);
+}
