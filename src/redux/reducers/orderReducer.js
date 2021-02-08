@@ -43,6 +43,12 @@ const orderReducer = (state = initialState, action) => {
         loading: false,
         errors: action.payload,
       };
+    case actionTypes.RETURN_START:
+      return {
+        ...state,
+        returnloading: true,
+        errors: null,
+      };
     default: {
       return state;
     }

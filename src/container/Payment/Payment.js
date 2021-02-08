@@ -136,6 +136,7 @@ class Payment extends React.Component {
   }
 
   onPaymentHandler = () => {
+    let month = new Date().getMonth() + 1;
     let data = {
       list: this.props.finalList,
       cardDetails: {
@@ -145,6 +146,8 @@ class Payment extends React.Component {
         expYear: this.state.expYear,
         cvv: this.state.cvv,
       },
+      time: new Date().getTime(),
+      date: new Date().getDate() + "-" + month + "-" + new Date().getFullYear(),
       discount: this.props.discount,
       totalPrice: this.props.finalTotalPrice,
     };

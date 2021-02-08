@@ -258,11 +258,9 @@ export const orderStart = (data, userId, authToken) => (dispatch) => {
       data
     )
     .then((res) => {
-      console.log(res);
       dispatch(orderSuccess(data));
     })
     .catch((err) => {
-      console.log(err);
       dispatch(orderFail(err.message));
     });
 };
@@ -289,7 +287,7 @@ export const orderFetchStart = (userId, authToken) => (dispatch) => {
     })
     .catch((err) => {
       dispatch(orderFetchFail(err.message));
-      console.log(err);
+      console.log("orderFetchStartFail");
     });
 };
 
@@ -302,3 +300,29 @@ export const orderFetchFail = (error) => ({
   type: actionTypes.ORDER_FETCH_FAIL,
   payload: error,
 });
+
+export const returnStart = (list, userId, authToken, postId, id, Status) => (
+  dispatch
+) => {
+  let updatedOrders = list.map((item) => {
+    if (item.id === id) {
+      return {
+        ...item,
+        status: Status,
+      };
+    }
+    return item;
+  });
+  axios
+    .put(
+      `https://shoppershop-bcc2c.firebaseio.com/orders/${userId}/${postId}/list.json?auth=${authToken}`,
+      updatedOrders
+    )
+    .then((res) => {
+      console.log("returnStartSuccess");
+      dispatch(orderFetchStart(userId, authToken));
+    })
+    .catch((error) => {
+      console.log("returnStartError");
+    });
+};

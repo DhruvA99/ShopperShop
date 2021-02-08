@@ -9,11 +9,21 @@
   font-weight: 600;
 }
 
-.container {
+.itemsFlexBox {
+  display: flex;
+  flex-direction: column;
+  padding: 2em;
+}
+
+.itemImage {
+  width: 100%;
+  max-width: 180px;
 }
 
 .itemContainer {
   margin: 2em;
   padding: 1em;
   background-color: rgb(230, 230, 230);
+  display: flex;
+  width: 70%;
 }

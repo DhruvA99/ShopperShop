@@ -1,0 +1,17 @@
+.hr {
+  width: 70%;
+}
+
+.inputContainer {
+  display: flex;
+  flex-direction: row;
+  margin: auto;
+  width: 70%;
+  justify-content: center;
+}
+
+textarea {
+  width: 70%;
+  resize: none;
+  padding: 10px;
+}

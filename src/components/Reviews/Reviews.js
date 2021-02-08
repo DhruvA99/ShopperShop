@@ -3,7 +3,7 @@ import "./Reviews.module.css";
 import classes from "./Reviews.module.css";
 
 const Reviews = (props) => {
-  let data = [];
+  let data = <p>No comments yet!</p>;
   if (props.reviews !== undefined) {
     data = Object.keys(props.reviews).map((key, index) => {
       let card = [];

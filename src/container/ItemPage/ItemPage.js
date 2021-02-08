@@ -9,6 +9,7 @@ import {
 } from "../../redux/actions/actionCreator";
 import { connect } from "react-redux";
 import Footer from "../../components/Footer/Footer";
+import AddReview from "../AddReview/AddReview";
 
 class ItemPage extends React.Component {
   state = {
@@ -57,6 +58,7 @@ class ItemPage extends React.Component {
           this.state.size +
           new Date().getSeconds(),
         name: this.props.location.state.name,
+        status: "NORMAL",
         url: this.props.location.state.url,
         size: this.state.size,
         price: this.props.location.state.price,
@@ -199,6 +201,7 @@ class ItemPage extends React.Component {
             <hr className={classes.Hr} />
             <br />
             <h2 style={{ textAlign: "center" }}>Reviews</h2>
+            <AddReview />
             <Reviews className={classes.review} reviews={reviews} />
           </div>
           <br />
