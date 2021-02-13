@@ -72,10 +72,28 @@ export const CartItemCheck = () => (dispatch) => {
   }
 };
 
-export const addItemCart = (data) => (dispatch) => {
+export const addItemCart = (data, id) => (dispatch) => {
+  let check = false; //for checking if the item is a repeat or not
   let ls = JSON.parse(localStorage.getItem("CartItems"));
   let tp = parseInt(JSON.parse(localStorage.getItem("TotalPrice")));
-  ls = [...ls, data];
+  let checkLs = ls.map((item) => {
+    console.log(item.id.slice(0, -3) + "-----" + id.slice(0, -3));
+    if (item.id.slice(0, -2) === id.slice(0, -2)) {
+      // slice to remove the last random string attached to the id for keeping it unique
+      check = true;
+      let prevQ = item.quantity;
+      return { ...item, quantity: item.quantity + 1 };
+    } else {
+      return item;
+    }
+  });
+  console.log(checkLs);
+  console.log(check);
+  if (check === true) {
+    ls = [...checkLs];
+  } else {
+    ls = [...ls, data];
+  }
   localStorage.setItem("CartItems", JSON.stringify(ls));
   localStorage.setItem("TotalPrice", tp + data.price);
   ls = JSON.parse(localStorage.getItem("CartItems"));
@@ -89,14 +107,21 @@ export const addItemCart = (data) => (dispatch) => {
 export const deleteItemCart = (id, price) => (dispatch) => {
   let ls = JSON.parse(localStorage.getItem("CartItems"));
   let tp = parseInt(JSON.parse(localStorage.getItem("TotalPrice")));
+  let quantity = 0;
+  ls.forEach((element) => {
+    if (element.id === id) {
+      quantity = element.quantity;
+    }
+  });
+  console.log(quantity);
   ls = ls.filter((key) => key.id !== id);
   localStorage.setItem("CartItems", JSON.stringify(ls));
-  localStorage.setItem("TotalPrice", tp - price);
+  localStorage.setItem("TotalPrice", tp - price * quantity);
   ls = JSON.parse(localStorage.getItem("CartItems"));
   dispatch({
     type: actionTypes.DELETE_CART,
     payload: ls,
-    price: price,
+    price: price * quantity,
   });
 };
 

@@ -27,3 +27,20 @@
   display: flex;
   width: 70%;
 }
+
+.orderStatus {
+  display: flex;
+  justify-content: space-between;
+}
+.orderStatusItem {
+  display: flex;
+  flex-direction: column;
+}
+
+.red {
+  color: red;
+}
+
+.green {
+  color: green;
+}

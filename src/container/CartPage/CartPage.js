@@ -73,6 +73,7 @@ class CartPage extends React.Component {
             <div style={{ flex: "30%", justifyContent: "center" }}>
               {item.price}
             </div>
+            <p>Quantity: {item.quantity}</p>
           </div>
         );
       });
@@ -96,7 +97,6 @@ class CartPage extends React.Component {
               </p>
               <p>{this.props.totalPrice}</p>
             </div>
-
             <div>
               <button
                 className={classes.buttonPayment}

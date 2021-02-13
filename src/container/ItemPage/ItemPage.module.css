@@ -43,9 +43,25 @@
   grid-area: itemDescription;
 }
 
-img {
+.image {
   width: 100%;
-  height: 100%;
+  height: 87%;
+}
+.smallImageBoxDiv {
+  display: flex;
+}
+
+.smallImageBox {
+  width: 50px;
+  margin: 5px 5px;
+  height: 50px;
+  border: 0.5px solid black;
+}
+.smallImage {
+  display: block;
+  margin: auto;
+  width: 50%;
+  height: 90%;
 }
 .price {
   font-size: 1.4rem;

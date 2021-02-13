@@ -26,8 +26,8 @@ class OrderList extends React.Component {
 
   render() {
     const { orders } = this.props;
-    let page = <p>Loading...</p>;
-    if (!this.props.loading) {
+    let page = <p>No Items in the List</p>;
+    if (!this.props.loading && orders !== null) {
       page = Object.keys(orders).map((key) => {
         let item = orders[key];
         console.log(item.list);

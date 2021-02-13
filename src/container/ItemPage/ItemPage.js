@@ -14,6 +14,7 @@ import AddReview from "../AddReview/AddReview";
 class ItemPage extends React.Component {
   state = {
     size: null,
+    firstImage: this.props.location.state.url,
     wishlistButtonDisable: false,
     firstRender: true,
     wishlistDisableHandlerCheck: false,
@@ -23,6 +24,10 @@ class ItemPage extends React.Component {
   //     this.props.wishlistData(this.props.userId, this.props.authToken);
   //   }
   // }
+
+  imageViewer = (url, id) => {
+    this.setState({ firstImage: url });
+  };
 
   wishListDataCallHandler = () => {
     if (this.props.authToken !== null) {
@@ -56,15 +61,16 @@ class ItemPage extends React.Component {
         id:
           this.props.location.state.id +
           this.state.size +
-          new Date().getSeconds(),
+          ("0" + new Date().getSeconds()).slice(-2),
         name: this.props.location.state.name,
         status: "NORMAL",
+        quantity: 1,
         url: this.props.location.state.url,
         size: this.state.size,
         price: this.props.location.state.price,
       };
-      this.props.addItemCart(data);
-      this.props.history.push("/checkout");
+      this.props.addItemCart(data, data.id);
+      // this.props.history.push("/checkout");
     } else {
       alert("please select a size!");
     }
@@ -92,7 +98,6 @@ class ItemPage extends React.Component {
 
   render() {
     const {
-      url,
       id,
       color,
       name,
@@ -100,6 +105,7 @@ class ItemPage extends React.Component {
       reviews,
       description,
       price,
+      images,
       size,
     } = this.props.location.state;
     if (this.props.wishlistLoading && this.state.firstRender) {
@@ -122,7 +128,27 @@ class ItemPage extends React.Component {
           <div className={classes.main}>
             <div className={classes.container}>
               <div className={classes.itemImage}>
-                <img src={url} alt="img" />
+                <img
+                  className={classes.image}
+                  src={this.state.firstImage}
+                  alt="img"
+                />
+                <div className={classes.smallImageBoxDiv}>
+                  {images.map((item) => {
+                    return (
+                      <div
+                        className={classes.smallImageBox}
+                        onClick={() => this.imageViewer(item.url, item.id)}
+                      >
+                        <img
+                          className={classes.smallImage}
+                          src={item.url}
+                          alt="img"
+                        />
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
               <div className={classes.Iteminfo}>
                 <h2
@@ -222,8 +248,8 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  addItemCart: (data) => {
-    dispatch(addItemCart(data));
+  addItemCart: (data, id) => {
+    dispatch(addItemCart(data, id));
   },
   wishListSendData: (data, token) => {
     dispatch(wishListSendData(data, token));
