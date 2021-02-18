@@ -45,6 +45,7 @@ class WishList extends React.Component {
               <h4>
                 <b>{item.name}</b>
               </h4>
+              <h4>Price: &#8377;{item.price}</h4>
               <button
                 className={classes.buttonDelete}
                 onClick={() => this.handleDeleteButton(key)}

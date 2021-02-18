@@ -77,9 +77,8 @@ export const addItemCart = (data, id) => (dispatch) => {
   let ls = JSON.parse(localStorage.getItem("CartItems"));
   let tp = parseInt(JSON.parse(localStorage.getItem("TotalPrice")));
   let checkLs = ls.map((item) => {
-    console.log(item.id.slice(0, -3) + "-----" + id.slice(0, -3));
     if (item.id.slice(0, -2) === id.slice(0, -2)) {
-      // slice to remove the last random string attached to the id for keeping it unique
+      // slice to remove the last random (string attached to the id for keeping it unique)
       check = true;
       let prevQ = item.quantity;
       return { ...item, quantity: item.quantity + 1 };
@@ -114,7 +113,19 @@ export const deleteItemCart = (id, price) => (dispatch) => {
     }
   });
   console.log(quantity);
-  ls = ls.filter((key) => key.id !== id);
+  if (quantity === 1) {
+    ls = ls.filter((key) => key.id !== id);
+  } else {
+    //if the item has quantity greater than 1
+    ls = ls.map((key) => {
+      if (key.id === id) {
+        key.quantity = quantity - 1;
+      }
+      return key;
+    });
+    quantity = 1;
+  }
+
   localStorage.setItem("CartItems", JSON.stringify(ls));
   localStorage.setItem("TotalPrice", tp - price * quantity);
   ls = JSON.parse(localStorage.getItem("CartItems"));

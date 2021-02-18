@@ -10,6 +10,7 @@ var reg = /^\d+$/;
 
 class Payment extends React.Component {
   state = {
+    cashOnDelivery: false,
     addLine1: "",
     addLine2: "",
     addLine3: "",
@@ -254,9 +255,27 @@ class Payment extends React.Component {
                 {this.state.error.mobileNo}
               </span>
             </div>
+
             <div className={classes.paymentContainer}>
               <span className={classes.heading}>PAYMENT</span>
-              <div className={classes.paymentContainer}>
+              <p>Opt for Cash On Delivery</p>
+              <input
+                className={classes.checkBox}
+                type="checkbox"
+                value={this.state.cashOnDelivery}
+                onChange={() =>
+                  this.setState((prevState) => ({
+                    cashOnDelivery: !prevState.cashOnDelivery,
+                  }))
+                }
+              />
+              <div
+                className={
+                  !this.state.cashOnDelivery
+                    ? classes.paymentContainer
+                    : classes.paymentContainerDisable
+                }
+              >
                 <span className={classes.sideText}>
                   <b>Accepted Cards</b>
                 </span>
