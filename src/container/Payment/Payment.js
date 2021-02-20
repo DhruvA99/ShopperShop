@@ -137,9 +137,18 @@ class Payment extends React.Component {
   }
 
   onPaymentHandler = () => {
+    let finalCost =
+      this.props.finalTotalPrice > 0
+        ? this.props.finalTotalPrice + 100
+        : this.props.finalTotalPrice;
     let month = new Date().getMonth() + 1;
     let data = {
-      list: this.props.finalList,
+      list: this.props.finalList.map((key) => {
+        return {
+          ...key,
+          orderStatus: 0,
+        };
+      }),
       cardDetails: {
         cardName: this.state.cardName,
         cardNo: this.state.cardNo,
@@ -150,7 +159,7 @@ class Payment extends React.Component {
       time: new Date().getTime(),
       date: new Date().getDate() + "-" + month + "-" + new Date().getFullYear(),
       discount: this.props.discount,
-      totalPrice: this.props.finalTotalPrice,
+      totalPrice: finalCost,
     };
     this.props.orderStart(data, this.props.userId, this.props.authToken);
   };
@@ -160,10 +169,10 @@ class Payment extends React.Component {
       return (
         <div key={item.id} className={classes.priceList_items}>
           <div style={{ flex: "80%", justifyContent: "center" }}>
-            {item.name} ({item.size})
+            {item.name} ({item.size}) X {item.quantity}
           </div>
           <div style={{ flex: "20%", justifyContent: "center" }}>
-            &#8377; {item.price}
+            &#8377; {item.price} X {item.quantity}
           </div>
         </div>
       );
