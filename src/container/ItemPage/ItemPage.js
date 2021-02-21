@@ -10,10 +10,13 @@ import {
 import { connect } from "react-redux";
 import Footer from "../../components/Footer/Footer";
 import AddReview from "../AddReview/AddReview";
+import Modal from "../../components/Modal/Modal";
 
 class ItemPage extends React.Component {
   state = {
     size: null,
+    sizeModal: false,
+    wishListModal: false,
     firstImage: this.props.location.state.url,
     wishlistButtonDisable: false,
     firstRender: true,
@@ -24,6 +27,14 @@ class ItemPage extends React.Component {
   //     this.props.wishlistData(this.props.userId, this.props.authToken);
   //   }
   // }
+
+  wishListModalChangeHandler = () => {
+    this.setState((prevState) => ({ wishListModal: !prevState.wishListModal }));
+  };
+
+  sizeModalChangeHandler = () => {
+    this.setState((prevState) => ({ sizeModal: !prevState.sizeModal }));
+  };
 
   imageViewer = (url, id) => {
     this.setState({ firstImage: url });
@@ -72,7 +83,7 @@ class ItemPage extends React.Component {
       this.props.addItemCart(data, data.id);
       // this.props.history.push("/checkout");
     } else {
-      alert("please select a size!");
+      this.sizeModalChangeHandler();
     }
   };
 
@@ -88,7 +99,7 @@ class ItemPage extends React.Component {
       this.props.wishListSendData(data, this.props.authToken);
       this.setState({ wishlistButtonDisable: true });
     } else {
-      alert("Please login first!");
+      this.wishListModalChangeHandler();
     }
   };
 
@@ -232,6 +243,18 @@ class ItemPage extends React.Component {
           </div>
           <br />
           <br />
+          <Modal
+            isOpen={this.state.sizeModal}
+            openHandler={this.sizeModalChangeHandler}
+          >
+            <p>Please select a size!</p>
+          </Modal>
+          <Modal
+            isOpen={this.state.wishListModal}
+            openHandler={this.wishListModalChangeHandler}
+          >
+            <p>Please Login first!</p>
+          </Modal>
           <Footer />
         </div>
       </>
