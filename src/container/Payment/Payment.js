@@ -5,11 +5,13 @@ import Navbar from "../../components/Navigation/Navbar";
 import { connect } from "react-redux";
 import { orderStart } from "../../redux/actions/actionCreator";
 import "font-awesome/css/font-awesome.min.css";
+import Modal from "../../components/Modal/Modal";
 
 var reg = /^\d+$/;
 
 class Payment extends React.Component {
   state = {
+    finalPurchaseModal: false,
     cashOnDelivery: false,
     addLine1: "",
     addLine2: "",
@@ -162,6 +164,20 @@ class Payment extends React.Component {
       totalPrice: finalCost,
     };
     this.props.orderStart(data, this.props.userId, this.props.authToken);
+    this.onFinalPaymenModalHandler();
+  };
+
+  onFinalPaymenModalHandler = () => {
+    this.setState(
+      (prevState) => ({
+        finalPurchaseModal: !prevState.finalPurchaseModal,
+      }),
+      () => {
+        if (!this.state.finalPurchaseModal) {
+          this.props.history.push("/");
+        }
+      }
+    );
   };
 
   render() {
@@ -475,9 +491,15 @@ class Payment extends React.Component {
               className={classes.submitButton}
               onClick={this.onPaymentHandler}
             >
-              PaymentDetails
+              Place Order
             </button>
           </div>
+          <Modal
+            isOpen={this.state.finalPurchaseModal}
+            openHandler={this.onFinalPaymenModalHandler}
+          >
+            <p>Thankyou for purchasing from us!Your order has been placed.</p>
+          </Modal>
         </div>
       </>
     );

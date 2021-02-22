@@ -17,6 +17,7 @@ class ItemPage extends React.Component {
     size: null,
     sizeModal: false,
     wishListModal: false,
+    cartModal: false,
     firstImage: this.props.location.state.url,
     wishlistButtonDisable: false,
     firstRender: true,
@@ -34,6 +35,10 @@ class ItemPage extends React.Component {
 
   sizeModalChangeHandler = () => {
     this.setState((prevState) => ({ sizeModal: !prevState.sizeModal }));
+  };
+
+  onCartModalChangeHandler = () => {
+    this.setState((prevState) => ({ cartModal: !prevState.cartModal }));
   };
 
   imageViewer = (url, id) => {
@@ -81,6 +86,7 @@ class ItemPage extends React.Component {
         price: this.props.location.state.price,
       };
       this.props.addItemCart(data, data.id);
+      this.onCartModalChangeHandler();
       // this.props.history.push("/checkout");
     } else {
       this.sizeModalChangeHandler();
@@ -254,6 +260,12 @@ class ItemPage extends React.Component {
             openHandler={this.wishListModalChangeHandler}
           >
             <p>Please Login first!</p>
+          </Modal>
+          <Modal
+            isOpen={this.state.cartModal}
+            openHandler={this.onCartModalChangeHandler}
+          >
+            <p>Order Added To your Cart!</p>
           </Modal>
           <Footer />
         </div>

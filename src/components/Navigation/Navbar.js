@@ -19,7 +19,7 @@ const Navbar = (props) => {
             HOME
           </NavLink>
           <NavLink className={classes.item} to="/checkout">
-            CHECKOUT
+            CART
           </NavLink>
           <NavLink className={classes.item} to="/login">
             LOGIN
@@ -55,7 +55,7 @@ const Navbar = (props) => {
               WISHLIST
             </NavLink>
             <NavLink className={classes.item} to="/checkout">
-              CHECKOUT
+              CART
             </NavLink>
             <NavLink className={classes.item} to="/logout">
               LOGOUT
