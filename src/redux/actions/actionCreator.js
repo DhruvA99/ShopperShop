@@ -372,9 +372,10 @@ export const AddReview = (
   lists,
   id,
   postId,
-  reviews,
   userReview,
-  productName
+  productName,
+  authToken,
+  userId
 ) => () => {
   let updatedOrders = lists.map((item) => {
     if (item.id === id) {
@@ -385,11 +386,11 @@ export const AddReview = (
     }
     return item;
   });
-  let updatedReviews = { ...reviews, userReview };
+  // let updatedReviews = { ...reviews, userReview };
   axios
-    .put(
+    .post(
       `https://shoppershop-bcc2c.firebaseio.com/products/${productName}/reviews.json?auth=${authToken}`,
-      updatedReviews
+      userReview
     )
     .then(() => {
       axios

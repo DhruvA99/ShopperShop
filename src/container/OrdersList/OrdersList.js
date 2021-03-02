@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import {
   orderFetchStart,
   returnStart,
+  AddReview,
 } from "../../redux/actions/actionCreator";
 import OrderListCardComponent from "./OrderListCardComponent/OrderListCardComponent";
 
@@ -24,7 +25,17 @@ class OrderList extends React.Component {
     );
   };
 
-  // reviewHandler = (lists, id, postId, this.props.email) => {};
+  reviewHandler = (lists, id, postId, productName, userReview) => {
+    this.props.AddReview(
+      lists,
+      id,
+      postId,
+      userReview,
+      productName,
+      this.props.authToken,
+      this.props.userId
+    );
+  };
 
   render() {
     const { orders } = this.props;
@@ -44,6 +55,8 @@ class OrderList extends React.Component {
               time={item.time}
               postId={key}
               returnHandler={this.returnHandler}
+              email={this.props.email}
+              reviewHandler={this.reviewHandler}
             />
           </div>
         );
@@ -66,6 +79,7 @@ const mapStateToProps = (state) => ({
   userId: state.auth.userId,
   orders: state.orders.orders,
   email: state.auth.email,
+  data: state.item.data,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -74,6 +88,19 @@ const mapDispatchToProps = (dispatch) => ({
   },
   returnStart: (lists, userId, authToken, postId, id, status) => {
     dispatch(returnStart(lists, userId, authToken, postId, id, status));
+  },
+  AddReview: (
+    lists,
+    id,
+    postId,
+    userReview,
+    productName,
+    authToken,
+    userId
+  ) => {
+    dispatch(
+      AddReview(lists, id, postId, userReview, productName, authToken, userId)
+    );
   },
 });
 

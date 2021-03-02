@@ -1,7 +1,8 @@
 // @ts-nocheck
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import classes from "./OrderListCardComponent.module.css";
 import Modal from "../../../components/Modal/Modal";
+import { connect } from "react-redux";
 
 const OrderListCardComponent = (props) => {
   const [returnModal, setReturnModal] = useState(false);
@@ -9,19 +10,51 @@ const OrderListCardComponent = (props) => {
     "size is too small"
   );
   const [modalData, setModalData] = useState({ id: null, status: null });
+  const [reviewModal, setReviewModal] = useState(false);
+  const [reviewData, setReviewData] = useState({ id: null, productName: null });
+  const [reviewFormData, setReviewFormData] = useState({
+    rating: 1,
+    review: "null",
+  });
 
   const returnModalOpenHandler = () => {
     setReturnModal((returnModal) => !returnModal);
   };
 
-  const returnSubmitHandler = (id, status) => {
-    props.returnHandler(props.list, props.postId, id, status);
+  const reviewModalOpenHandler = () => {
+    setReviewModal((reviewModal) => !reviewModal);
+  };
+
+  const returnSubmitHandler = (data) => {
+    props.returnHandler(props.list, props.postId, data.id, data.status);
+  };
+  const reviewSubmitHandler = (data) => {
+    const userReview = {
+      name: props.email,
+      rating: reviewFormData.rating,
+      review: reviewFormData.review,
+    };
+    props.reviewHandler(
+      props.list,
+      reviewData.id,
+      props.postId,
+      reviewData.productName,
+      userReview
+    );
   };
 
   const ReturnHandler = (id, status) => {
     returnModalOpenHandler();
     const data = { id: id, status: status };
     setModalData({ ...data });
+  };
+
+  const ReviewHandler = (id, productName) => {
+    reviewModalOpenHandler();
+    setReviewData({
+      id: id,
+      productName: productName,
+    });
   };
 
   const getTime = () => {
@@ -83,13 +116,18 @@ const OrderListCardComponent = (props) => {
                         aria-hidden="true"
                       ></i>
                       <p>Order Recieved</p>
-                      {key.orderStatus > 2 && !key.ReviewCheck ? (
-                        <button>Add a Review</button>
-                      ) : null}
                     </div>
                   </div>
                 )}
-
+                {key.orderStatus > 2 && !key.reviewCheck ? (
+                  <button
+                    onClick={() => ReviewHandler(key.id, key.productName)}
+                  >
+                    Add a Review
+                  </button>
+                ) : (
+                  <p>Review Already Added</p>
+                )}
                 <div className={classes.buttonDiv}>
                   {key.orderStatus <= 2 && key.status !== "CANCEL" ? (
                     <button onClick={() => CancelHandler(key.id, "CANCEL")}>
@@ -133,6 +171,20 @@ const OrderListCardComponent = (props) => {
         <p>Discount: {props.discount}</p>
         <p>Total Price: {props.totalPrice}</p>
         <Modal
+          isOpen={reviewModal}
+          openHandler={reviewModalOpenHandler}
+          submitHandler={reviewSubmitHandler}
+          submitButton={true}
+          submitText="Add Review"
+          modalData={{}}
+        >
+          <div className={classes.Form}>
+            <span className={classes.FormSpan}>
+              Why do you want to return the item?
+            </span>
+          </div>
+        </Modal>
+        <Modal
           isOpen={returnModal}
           openHandler={returnModalOpenHandler}
           submitHandler={returnSubmitHandler}
@@ -174,4 +226,6 @@ const OrderListCardComponent = (props) => {
   );
 };
 
-export default OrderListCardComponent;
+const mapStateToProps = (state) => ({});
+
+export default connect(mapStateToProps)(OrderListCardComponent);
