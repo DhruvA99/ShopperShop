@@ -49,7 +49,7 @@ class CartPage extends React.Component {
                 <b>{item.name}</b>
               </h4>
               <p>{item.size}</p>
-
+              <p>{item.productName}</p>
               <button
                 className={classes.buttonDelete}
                 onClick={() => this.handleDeleteButton(item.id, item.price)}

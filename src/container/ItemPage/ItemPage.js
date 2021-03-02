@@ -18,7 +18,7 @@ class ItemPage extends React.Component {
     sizeModal: false,
     wishListModal: false,
     cartModal: false,
-    firstImage: this.props.location.state.url,
+    firstImage: this.props.location.state.data.url,
     wishlistButtonDisable: false,
     firstRender: true,
     wishlistDisableHandlerCheck: false,
@@ -75,15 +75,16 @@ class ItemPage extends React.Component {
     if (this.state.size !== null) {
       const data = {
         id:
-          this.props.location.state.id +
+          this.props.location.state.data.id +
           this.state.size +
           ("0" + new Date().getSeconds()).slice(-2),
-        name: this.props.location.state.name,
+        name: this.props.location.state.data.name,
         status: "NORMAL",
         quantity: 1,
-        url: this.props.location.state.url,
+        productName: this.props.location.state.productName,
+        url: this.props.location.state.data.url,
         size: this.state.size,
-        price: this.props.location.state.price,
+        price: this.props.location.state.data.price,
       };
       this.props.addItemCart(data, data.id);
       this.onCartModalChangeHandler();
@@ -96,11 +97,11 @@ class ItemPage extends React.Component {
   onWishListClickHandler = () => {
     if (this.props.authToken) {
       const data = {
-        id: this.props.location.state.id,
+        id: this.props.location.state.data.id,
         userId: this.props.userId,
-        name: this.props.location.state.name,
-        url: this.props.location.state.url,
-        price: this.props.location.state.price,
+        name: this.props.location.state.data.name,
+        url: this.props.location.state.data.url,
+        price: this.props.location.state.data.price,
       };
       this.props.wishListSendData(data, this.props.authToken);
       this.setState({ wishlistButtonDisable: true });
@@ -124,7 +125,7 @@ class ItemPage extends React.Component {
       price,
       images,
       size,
-    } = this.props.location.state;
+    } = this.props.location.state.data;
     if (this.props.wishlistLoading && this.state.firstRender) {
       //this will only be executed once when loading is true and firstRender is set to true
       this.wishListDataCallHandler();

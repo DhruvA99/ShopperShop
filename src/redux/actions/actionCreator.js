@@ -368,7 +368,14 @@ export const returnStart = (list, userId, authToken, postId, id, Status) => (
     });
 };
 
-export const AddReview = (lists, id, postId, email, reviews) => (dispatch) => {
+export const AddReview = (
+  lists,
+  id,
+  postId,
+  reviews,
+  userReview,
+  productName
+) => () => {
   let updatedOrders = lists.map((item) => {
     if (item.id === id) {
       return {
@@ -378,8 +385,25 @@ export const AddReview = (lists, id, postId, email, reviews) => (dispatch) => {
     }
     return item;
   });
+  let updatedReviews = { ...reviews, userReview };
+  axios
+    .put(
+      `https://shoppershop-bcc2c.firebaseio.com/products/${productName}/reviews.json?auth=${authToken}`,
+      updatedReviews
+    )
+    .then(() => {
+      axios
+        .put(
+          `https://shoppershop-bcc2c.firebaseio.com/orders/${userId}/${postId}/list.json?auth=${authToken}`,
+          updatedOrders
+        )
+        .then(() => {
+          itemGetStarted();
+        });
+    })
+    .catch((err) => console.log(err.message));
 };
 
-export const addReviewSuccess = () => ({});
+// export const addReviewSuccess = () => ({});
 
-export const addReviewFail = () => ({});
+// export const addReviewFail = () => ({});

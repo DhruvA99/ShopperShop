@@ -26,7 +26,7 @@ class ItemsLayout extends React.Component {
               style={{ textDecoration: "none" }}
               to={{
                 pathname: `/item/${this.props.data[key].id}`,
-                state: this.props.data[key],
+                state: { data: this.props.data[key], productName: key },
               }}
             >
               <CardComponent data={this.props.data[key]} />
