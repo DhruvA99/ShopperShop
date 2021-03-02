@@ -142,10 +142,11 @@ export const authStart = () => ({
   type: actionTypes.AUTH_START,
 });
 
-export const authSuccess = (authData, userId) => ({
+export const authSuccess = (authData, userId, email) => ({
   type: actionTypes.AUTH_SUCCESS,
   payload: authData,
   userId: userId,
+  email: email,
 });
 export const authFail = (error) => ({
   type: actionTypes.AUTH_FAIL,
@@ -168,12 +169,14 @@ export const authGetStarted = (email, password, isSignUp) => (dispatch) => {
   axios
     .post(url, authData)
     .then((res) => {
+      console.log(res);
       const expirationDate = new Date(
         new Date().getTime() + res.data.expiresIn * 1000
       );
       localStorage.setItem("token", res.data.idToken);
       localStorage.setItem("expirationDate", expirationDate);
       localStorage.setItem("userId", res.data.localId);
+      localStorage.setItem("email", res.data.email);
       dispatch(authSuccess(res.data.idToken, res.data.localId));
     })
     .catch((err) => {
@@ -188,6 +191,7 @@ export const errorClear = () => ({
 export const logout = () => (dispatch) => {
   localStorage.removeItem("token");
   localStorage.removeItem("userId");
+  localStorage.removeItem("email");
   localStorage.removeItem("expirationDate");
   dispatch({ type: actionTypes.AUTH_LOGOUT });
 };
@@ -208,7 +212,8 @@ export const checkAuthState = () => (dispatch) => {
       dispatch(logout());
     } else {
       const id = localStorage.getItem("userId");
-      dispatch(authSuccess(token, id));
+      const email = localStorage.getItem("email");
+      dispatch(authSuccess(token, id, email));
       dispatch(
         checkAuthTimeout((ExpDate.getTime() - new Date().getTime()) / 1000)
       );
@@ -362,3 +367,19 @@ export const returnStart = (list, userId, authToken, postId, id, Status) => (
       console.log("returnStartError");
     });
 };
+
+export const AddReview = (lists, id, postId, email, reviews) => (dispatch) => {
+  let updatedOrders = lists.map((item) => {
+    if (item.id === id) {
+      return {
+        ...item,
+        reviewCheck: true,
+      };
+    }
+    return item;
+  });
+};
+
+export const addReviewSuccess = () => ({});
+
+export const addReviewFail = () => ({});

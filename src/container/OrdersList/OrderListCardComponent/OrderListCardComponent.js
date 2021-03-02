@@ -1,7 +1,29 @@
-import React from "react";
+// @ts-nocheck
+import React, { useEffect, useState } from "react";
 import classes from "./OrderListCardComponent.module.css";
+import Modal from "../../../components/Modal/Modal";
 
 const OrderListCardComponent = (props) => {
+  const [returnModal, setReturnModal] = useState(false);
+  const [returnReasonValue, setReturnReasonValue] = useState(
+    "size is too small"
+  );
+  const [modalData, setModalData] = useState({ id: null, status: null });
+
+  const returnModalOpenHandler = () => {
+    setReturnModal((returnModal) => !returnModal);
+  };
+
+  const returnSubmitHandler = (id, status) => {
+    props.returnHandler(props.list, props.postId, id, status);
+  };
+
+  const ReturnHandler = (id, status) => {
+    returnModalOpenHandler();
+    const data = { id: id, status: status };
+    setModalData({ ...data });
+  };
+
   const getTime = () => {
     let time = Math.floor(
       (new Date().getTime() - props.time) / (60 * 60 * 24 * 1000)
@@ -11,9 +33,6 @@ const OrderListCardComponent = (props) => {
     } else {
       return 7 - time + " days left for return";
     }
-  };
-  const ReturnHandler = (id, status) => {
-    props.returnHandler(props.list, props.postId, id, status);
   };
 
   const CancelHandler = (id, status) => {
@@ -64,6 +83,9 @@ const OrderListCardComponent = (props) => {
                         aria-hidden="true"
                       ></i>
                       <p>Order Recieved</p>
+                      {key.orderStatus > 2 && !key.ReviewCheck ? (
+                        <button>Add a Review</button>
+                      ) : null}
                     </div>
                   </div>
                 )}
@@ -88,7 +110,16 @@ const OrderListCardComponent = (props) => {
                         <h3 style={{ color: "green" }}>
                           This Item is already requested for return
                         </h3>
-                        <button onClick={() => ReturnHandler(key.id, "NORMAL")}>
+                        <button
+                          onClick={() =>
+                            props.returnHandler(
+                              props.list,
+                              props.postId,
+                              key.id,
+                              "NORMAL"
+                            )
+                          }
+                        >
                           CANCEL RETURN
                         </button>
                       </div>
@@ -101,6 +132,34 @@ const OrderListCardComponent = (props) => {
         })}
         <p>Discount: {props.discount}</p>
         <p>Total Price: {props.totalPrice}</p>
+        <Modal
+          isOpen={returnModal}
+          openHandler={returnModalOpenHandler}
+          submitHandler={returnSubmitHandler}
+          submitButton={true}
+          submitText="Return"
+          modalData={modalData}
+        >
+          <div className={classes.Form}>
+            <span className={classes.FormSpan}>
+              Why do you want to return the item?
+            </span>
+            <select
+              className={classes.formInput}
+              value={returnReasonValue}
+              defaultValue={"size is too small"}
+            >
+              <option value="size is too small">SIZE IS TOO SMALL</option>
+              <option value="size is too large">SIZE IS TOO LARGE</option>
+              <option value="the product is not as described">
+                THE PRODUCT IS NOT AS DESCRIBED
+              </option>
+              <option value="product is defective">PRODUCT IS DEFECTIVE</option>
+            </select>
+            <span className={classes.FormSpan}>Other Details</span>
+            <input className={classes.formInput} type="text" />{" "}
+          </div>
+        </Modal>
       </div>
     );
   }

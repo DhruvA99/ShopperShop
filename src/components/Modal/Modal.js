@@ -9,6 +9,15 @@ const Modal = (props) => {
           &times;
         </span>
         <div>{props.children}</div>
+        {props.submitButton ? (
+          <button
+            onClick={() =>
+              props.submitHandler(props.modalData.id, props.modalData.status)
+            }
+          >
+            {props.submitText}
+          </button>
+        ) : null}
       </div>
     </div>
   );

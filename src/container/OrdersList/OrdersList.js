@@ -24,6 +24,8 @@ class OrderList extends React.Component {
     );
   };
 
+  // reviewHandler = (lists, id, postId, this.props.email) => {};
+
   render() {
     const { orders } = this.props;
     let page = <p>No Items in the List</p>;
@@ -50,6 +52,7 @@ class OrderList extends React.Component {
     return (
       <div>
         <Navbar />
+        <h1>Welcome {this.props.email}!</h1>
         <span className={classes.mainHeading}>YOUR ORDERS</span>
         <div className={classes.main}>{page}</div>
       </div>
@@ -62,6 +65,7 @@ const mapStateToProps = (state) => ({
   authToken: state.auth.authToken,
   userId: state.auth.userId,
   orders: state.orders.orders,
+  email: state.auth.email,
 });
 
 const mapDispatchToProps = (dispatch) => ({
