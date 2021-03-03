@@ -9,7 +9,7 @@ import {
 } from "../../redux/actions/actionCreator";
 import { connect } from "react-redux";
 import Footer from "../../components/Footer/Footer";
-import AddReview from "../AddReview/AddReview";
+
 import Modal from "../../components/Modal/Modal";
 
 class ItemPage extends React.Component {
@@ -245,7 +245,7 @@ class ItemPage extends React.Component {
             <hr className={classes.Hr} />
             <br />
             <h2 style={{ textAlign: "center" }}>Reviews</h2>
-            <AddReview />
+
             <Reviews className={classes.review} reviews={reviews} />
           </div>
           <br />

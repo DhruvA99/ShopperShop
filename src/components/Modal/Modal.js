@@ -10,7 +10,10 @@ const Modal = (props) => {
         </span>
         <div>{props.children}</div>
         {props.submitButton ? (
-          <button onClick={() => props.submitHandler(props.modalData)}>
+          <button
+            disabled={!props.isValid}
+            onClick={() => props.submitHandler(props.modalData)}
+          >
             {props.submitText}
           </button>
         ) : null}

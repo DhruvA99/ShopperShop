@@ -14,8 +14,31 @@ const OrderListCardComponent = (props) => {
   const [reviewData, setReviewData] = useState({ id: null, productName: null });
   const [reviewFormData, setReviewFormData] = useState({
     rating: 1,
-    review: "null",
+    review: "",
   });
+  const [errors, setErrors] = useState({ review: "" });
+  const [isValid, setIsValid] = useState(false);
+
+  const onChangeHandler = (e) => {
+    setReviewFormData((reviewFormData) => ({
+      ...reviewFormData,
+      [e.target.name]: e.target.value,
+    }));
+    let Valid = false;
+    let error = { ...errors };
+    switch (e.target.name) {
+      case "review":
+        error.review = e.target.value < 1 ? "Review cannot be left empty" : "";
+        break;
+      default:
+        break;
+    }
+    if (error.review === "" && reviewFormData.review !== "") {
+      Valid = true;
+    }
+    setErrors(error);
+    setIsValid(Valid);
+  };
 
   const returnModalOpenHandler = () => {
     setReturnModal((returnModal) => !returnModal);
@@ -41,6 +64,7 @@ const OrderListCardComponent = (props) => {
       reviewData.productName,
       userReview
     );
+    reviewModalOpenHandler();
   };
 
   const ReturnHandler = (id, status) => {
@@ -177,11 +201,33 @@ const OrderListCardComponent = (props) => {
           submitButton={true}
           submitText="Add Review"
           modalData={{}}
+          isValid={isValid}
         >
           <div className={classes.Form}>
-            <span className={classes.FormSpan}>
-              Why do you want to return the item?
-            </span>
+            <span className={classes.FormSpan}>Rating</span>
+            <select
+              className={classes.formInput}
+              name="rating"
+              value={reviewFormData.rating}
+              onChange={onChangeHandler}
+            >
+              <option value={1}>1</option>
+              <option value={2}>2</option>
+              <option value={3}>3</option>
+              <option value={4}>4</option>
+              <option value={5}>5</option>
+            </select>
+            <span className={classes.FormSpan}>Review</span>
+            <input
+              name="review"
+              className={classes.formInput}
+              onChange={onChangeHandler}
+              value={reviewFormData.review}
+              type="text"
+            />{" "}
+            <p>
+              <small>{errors.review}</small>
+            </p>
           </div>
         </Modal>
         <Modal
@@ -191,6 +237,7 @@ const OrderListCardComponent = (props) => {
           submitButton={true}
           submitText="Return"
           modalData={modalData}
+          isValid={true}
         >
           <div className={classes.Form}>
             <span className={classes.FormSpan}>

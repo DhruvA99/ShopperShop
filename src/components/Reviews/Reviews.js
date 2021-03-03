@@ -7,7 +7,7 @@ const Reviews = (props) => {
   if (props.reviews !== undefined) {
     data = Object.keys(props.reviews).map((key, index) => {
       let card = [];
-      card = [...Array(props.reviews[key].rating)].map((e, ind) => (
+      card = [...Array(parseInt(props.reviews[key].rating))].map((e, ind) => (
         <span key={props.reviews[key].name + index + ind}>&#9733;</span>
       ));
       return (
