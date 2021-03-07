@@ -6,6 +6,7 @@ import {
   orderFetchStart,
   returnStart,
   AddReview,
+  RemoveReview,
 } from "../../redux/actions/actionCreator";
 import OrderListCardComponent from "./OrderListCardComponent/OrderListCardComponent";
 
@@ -14,14 +15,28 @@ class OrderList extends React.Component {
     this.props.orderFetchStart(this.props.userId, this.props.authToken);
   }
 
-  returnHandler = (lists, postId, id, status) => {
+  returnHandler = (lists, postId, id, status, returnReason) => {
     this.props.returnStart(
       lists,
       this.props.userId,
       this.props.authToken,
       postId,
       id,
-      status
+      status,
+      returnReason
+    );
+  };
+
+  reviewDeleteHandler = (lists, id, postId, productName, email) => {
+    this.props.RemoveReview(
+      lists,
+      id,
+      postId,
+      productName,
+      this.props.authToken,
+      this.props.userId,
+      email,
+      this.props.data[productName].reviews
     );
   };
 
@@ -53,6 +68,7 @@ class OrderList extends React.Component {
               discount={item.discount}
               date={item.date}
               time={item.time}
+              handleReviewDelete={this.reviewDeleteHandler}
               postId={key}
               returnHandler={this.returnHandler}
               email={this.props.email}
@@ -86,8 +102,10 @@ const mapDispatchToProps = (dispatch) => ({
   orderFetchStart: (userId, authToken) => {
     dispatch(orderFetchStart(userId, authToken));
   },
-  returnStart: (lists, userId, authToken, postId, id, status) => {
-    dispatch(returnStart(lists, userId, authToken, postId, id, status));
+  returnStart: (lists, userId, authToken, postId, id, status, returnReason) => {
+    dispatch(
+      returnStart(lists, userId, authToken, postId, id, status, returnReason)
+    );
   },
   AddReview: (
     lists,
@@ -100,6 +118,29 @@ const mapDispatchToProps = (dispatch) => ({
   ) => {
     dispatch(
       AddReview(lists, id, postId, userReview, productName, authToken, userId)
+    );
+  },
+  RemoveReview: (
+    lists,
+    id,
+    postId,
+    productName,
+    authToken,
+    userId,
+    email,
+    reviews
+  ) => {
+    dispatch(
+      RemoveReview(
+        lists,
+        id,
+        postId,
+        productName,
+        authToken,
+        userId,
+        email,
+        reviews
+      )
     );
   },
 });

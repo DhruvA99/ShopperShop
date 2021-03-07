@@ -12,7 +12,7 @@ const Reviews = (props) => {
       ));
       return (
         <div
-          className={classes.main}
+          className={index % 2 === 0 ? classes.main1 : classes.main2}
           key={new Date().getMilliseconds() + index}
         >
           <h3>{props.reviews[key].name}</h3>

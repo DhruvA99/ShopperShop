@@ -100,6 +100,7 @@ class ItemPage extends React.Component {
         id: this.props.location.state.data.id,
         userId: this.props.userId,
         name: this.props.location.state.data.name,
+        productName: this.props.location.state.productName,
         url: this.props.location.state.data.url,
         price: this.props.location.state.data.price,
       };

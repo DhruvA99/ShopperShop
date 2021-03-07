@@ -6,22 +6,33 @@ import {
   deleteItemCart,
   checkoutPaymentStart,
 } from "../../redux/actions/actionCreator";
+import Modal from "components/Modal/Modal";
 
 class CartPage extends React.Component {
   state = {
     items: [],
+    deleteModalOpen: false,
     totalPrice: 0,
+    deleteModalData: { id: null, price: null },
   };
 
   componentDidMount() {
     this.setState({ items: this.props.items });
   }
 
+  handleDeleteModalOpen = () => {
+    this.setState((prevState) => ({
+      deleteModalOpen: !prevState.deleteModalOpen,
+    }));
+  };
+
   handleDeleteButton = (id, price) => {
-    console.log(price);
-    if (window.confirm("do you want to delete the selected item?")) {
-      this.props.deleteItemCart(id, price);
-    }
+    this.handleDeleteModalOpen();
+    this.setState({ deleteModalData: { id, price } }); //id:id,price:price
+  };
+  handleDeleteConfirm = (data) => {
+    this.props.deleteItemCart(data.id, data.price);
+    this.handleDeleteModalOpen();
   };
 
   paymentHandler = () => {
@@ -57,6 +68,19 @@ class CartPage extends React.Component {
                 Delete
               </button>
             </div>
+            <Modal
+              isOpen={this.state.deleteModalOpen}
+              openHandler={this.handleDeleteModalOpen}
+              submitButton={true}
+              isValid={true}
+              submitHandler={this.handleDeleteConfirm}
+              modalData={this.state.deleteModalData}
+              submitText="Confirm"
+            >
+              <div>
+                <h3>Do you want to delete the item from the cart?</h3>
+              </div>
+            </Modal>
           </div>
         );
       });

@@ -6,9 +6,10 @@ import { connect } from "react-redux";
 
 const OrderListCardComponent = (props) => {
   const [returnModal, setReturnModal] = useState(false);
-  const [returnReasonValue, setReturnReasonValue] = useState(
-    "size is too small"
-  );
+  const [returnReasonValue, setReturnReasonValue] = useState({
+    reason: "size is too small",
+    additionalDetails: "",
+  });
   const [modalData, setModalData] = useState({ id: null, status: null });
   const [reviewModal, setReviewModal] = useState(false);
   const [reviewData, setReviewData] = useState({ id: null, productName: null });
@@ -16,16 +17,23 @@ const OrderListCardComponent = (props) => {
     rating: 1,
     review: "",
   });
-  const [errors, setErrors] = useState({ review: "" });
+  const [reviewErrors, setReviewErrors] = useState({ review: "" });
   const [isValid, setIsValid] = useState(false);
 
-  const onChangeHandler = (e) => {
+  const onChangeHandler2 = (e) => {
+    setReturnReasonValue((returnReasonValue) => ({
+      ...returnReasonValue,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  const onChangeHandler1 = (e) => {
     setReviewFormData((reviewFormData) => ({
       ...reviewFormData,
       [e.target.name]: e.target.value,
     }));
     let Valid = false;
-    let error = { ...errors };
+    let error = { ...reviewErrors };
     switch (e.target.name) {
       case "review":
         error.review = e.target.value < 1 ? "Review cannot be left empty" : "";
@@ -36,7 +44,7 @@ const OrderListCardComponent = (props) => {
     if (error.review === "" && reviewFormData.review !== "") {
       Valid = true;
     }
-    setErrors(error);
+    setReviewErrors(error);
     setIsValid(Valid);
   };
 
@@ -48,8 +56,24 @@ const OrderListCardComponent = (props) => {
     setReviewModal((reviewModal) => !reviewModal);
   };
 
+  const reviewDeleteHandler = (id, productName) => {
+    props.handleReviewDelete(
+      props.list,
+      id,
+      props.postId,
+      productName,
+      props.email
+    );
+  };
+
   const returnSubmitHandler = (data) => {
-    props.returnHandler(props.list, props.postId, data.id, data.status);
+    props.returnHandler(
+      props.list,
+      props.postId,
+      data.id,
+      data.status,
+      returnReasonValue
+    );
   };
   const reviewSubmitHandler = (data) => {
     const userReview = {
@@ -143,19 +167,31 @@ const OrderListCardComponent = (props) => {
                     </div>
                   </div>
                 )}
-                {key.orderStatus > 2 && !key.reviewCheck ? (
-                  <button
-                    onClick={() => ReviewHandler(key.id, key.productName)}
-                  >
-                    Add a Review
-                  </button>
-                ) : (
-                  <p>Review Already Added</p>
-                )}
+                {key.orderStatus > 2 ? (
+                  !key.reviewCheck ? (
+                    <button
+                      onClick={() => ReviewHandler(key.id, key.productName)}
+                    >
+                      Add a Review
+                    </button>
+                  ) : (
+                    <div>
+                      <p>Review Already Added</p>
+                      <button
+                        onClick={() =>
+                          reviewDeleteHandler(key.id, key.productName)
+                        }
+                      >
+                        Remove Review
+                      </button>
+                    </div>
+                  )
+                ) : null}
+
                 <div className={classes.buttonDiv}>
                   {key.orderStatus <= 2 && key.status !== "CANCEL" ? (
                     <button onClick={() => CancelHandler(key.id, "CANCEL")}>
-                      CANCEL
+                      CANCEL ORDER
                     </button>
                   ) : null}
                   {key.orderStatus > 2 ? (
@@ -209,7 +245,7 @@ const OrderListCardComponent = (props) => {
               className={classes.formInput}
               name="rating"
               value={reviewFormData.rating}
-              onChange={onChangeHandler}
+              onChange={onChangeHandler1}
             >
               <option value={1}>1</option>
               <option value={2}>2</option>
@@ -221,12 +257,12 @@ const OrderListCardComponent = (props) => {
             <input
               name="review"
               className={classes.formInput}
-              onChange={onChangeHandler}
+              onChange={onChangeHandler1}
               value={reviewFormData.review}
               type="text"
             />{" "}
             <p>
-              <small>{errors.review}</small>
+              <small>{reviewErrors.review}</small>
             </p>
           </div>
         </Modal>
@@ -245,7 +281,9 @@ const OrderListCardComponent = (props) => {
             </span>
             <select
               className={classes.formInput}
-              value={returnReasonValue}
+              name="reason"
+              onChange={onChangeHandler2}
+              value={returnReasonValue.reason}
               defaultValue={"size is too small"}
             >
               <option value="size is too small">SIZE IS TOO SMALL</option>
@@ -256,7 +294,13 @@ const OrderListCardComponent = (props) => {
               <option value="product is defective">PRODUCT IS DEFECTIVE</option>
             </select>
             <span className={classes.FormSpan}>Other Details</span>
-            <input className={classes.formInput} type="text" />{" "}
+            <input
+              className={classes.formInput}
+              name="additionalDetails"
+              onChange={onChangeHandler2}
+              value={returnReasonValue.additionalDetails}
+              type="text"
+            />{" "}
           </div>
         </Modal>
       </div>
