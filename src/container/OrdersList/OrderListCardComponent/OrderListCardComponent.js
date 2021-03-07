@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import classes from "./OrderListCardComponent.module.css";
 import Modal from "../../../components/Modal/Modal";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 
 const OrderListCardComponent = (props) => {
   const [returnModal, setReturnModal] = useState(false);
@@ -127,7 +128,18 @@ const OrderListCardComponent = (props) => {
         {props.list.map((key) => {
           return (
             <div key={key.id} className={classes.itemContainer}>
-              <img className={classes.itemImage} src={key.url} alt="img" />
+              <Link
+                style={{ textDecoration: "none" }}
+                to={{
+                  pathname: `/item/${key.id.slice(0, -3)}`,
+                  state: {
+                    data: props.productData[key.productName],
+                    productName: key.productName,
+                  },
+                }}
+              >
+                <img className={classes.itemImage} src={key.url} alt="img" />
+              </Link>
               <div className={classes.itemsFlexBox}>
                 <h2>{key.name}</h2>
                 <p>Size: {key.size}</p>

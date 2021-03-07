@@ -73,6 +73,7 @@ class OrderList extends React.Component {
               returnHandler={this.returnHandler}
               email={this.props.email}
               reviewHandler={this.reviewHandler}
+              productData={this.props.data}
             />
           </div>
         );

@@ -42,6 +42,7 @@ class WishList extends React.Component {
         return (
           <>
             <Link
+              style={{ textDecoration: "none", color: "black" }}
               to={{
                 pathname: `/item/${item.id}`,
                 state: {
