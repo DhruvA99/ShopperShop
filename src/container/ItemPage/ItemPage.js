@@ -59,7 +59,7 @@ class ItemPage extends React.Component {
       this.props.items !== null
     ) {
       let wishlistButtonDisable = Object.keys(this.props.items).find(
-        (key) => this.props.items[key].id === this.props.location.state.id
+        (key) => this.props.items[key].id === this.props.location.state.data.id
       )
         ? true
         : false;

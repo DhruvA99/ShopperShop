@@ -28,6 +28,7 @@ class OrderList extends React.Component {
   };
 
   reviewDeleteHandler = (lists, id, postId, productName, email) => {
+    console.log(this.props.data[productName].reviews);
     this.props.RemoveReview(
       lists,
       id,
@@ -54,11 +55,14 @@ class OrderList extends React.Component {
 
   render() {
     const { orders } = this.props;
-    let page = <p>No Items in the List</p>;
+    let page = <p>Loading...</p>;
+    if (!this.props.loading && orders === null) {
+      let page = <p>No items in the list!</p>;
+    }
     if (!this.props.loading && orders !== null) {
       page = Object.keys(orders).map((key) => {
         let item = orders[key];
-        console.log(item.list);
+
         return (
           <div key={key}>
             <OrderListCardComponent

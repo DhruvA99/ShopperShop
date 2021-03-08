@@ -65,7 +65,6 @@ export const CartItemCheck = () => (dispatch) => {
     localStorage.setItem("CartItems", JSON.stringify([]));
     localStorage.setItem("TotalPrice", JSON.stringify(0));
   } else {
-    console.log("cartitemcheckalreadypresent");
     let ls = JSON.parse(localStorage.getItem("CartItems"));
     let tp = parseInt(JSON.parse(localStorage.getItem("TotalPrice")));
     dispatch({ type: actionTypes.ADD_CART, payload: tp, ls: ls });
@@ -324,11 +323,9 @@ export const orderFetchStart = (userId, authToken) => (dispatch) => {
     )
     .then((res) => {
       dispatch(orderFetchSuccess(res.data));
-      console.log("orderFetchStart called ", res.data);
     })
     .catch((err) => {
       dispatch(orderFetchFail(err.message));
-      console.log("orderFetchStartFail");
     });
 };
 
@@ -375,13 +372,13 @@ export const returnStart = (
       return item;
     });
   }
+  dispatch({ type: actionTypes.ORDER_START });
   axios
     .put(
       `https://shoppershop-bcc2c.firebaseio.com/orders/${userId}/${postId}/list.json?auth=${authToken}`,
       updatedOrders
     )
     .then((res) => {
-      console.log("returnStartSuccess");
       dispatch(orderFetchStart(userId, authToken));
     })
     .catch((error) => {
@@ -408,19 +405,21 @@ export const AddReview = (
     return item;
   });
   // let updatedReviews = { ...reviews, userReview };
+  dispatch({ type: actionTypes.ORDER_START });
+
   axios
     .post(
       `https://shoppershop-bcc2c.firebaseio.com/products/${productName}/reviews.json?auth=${authToken}`,
       userReview
     )
-    .then(() => {
+    .then((response) => {
       axios
         .put(
           `https://shoppershop-bcc2c.firebaseio.com/orders/${userId}/${postId}/list.json?auth=${authToken}`,
           updatedOrders
         )
-        .then(() => {
-          itemGetStarted();
+        .then((res) => {
+          dispatch(itemGetStarted());
           dispatch(orderFetchStart(userId, authToken));
         });
     })
@@ -453,24 +452,28 @@ export const RemoveReview = (
   let reviewKey = null;
   for (let key in reviews) {
     if (reviews[key].name === email) {
+      console.log(key);
       reviewKey = key;
       break;
       // updatedReviews={...updatedReviews,[key]:reviews[key]}
     }
   }
+  dispatch({ type: actionTypes.ORDER_START });
   axios
     .put(
       `https://shoppershop-bcc2c.firebaseio.com/orders/${userId}/${postId}/list.json?auth=${authToken}`,
       updatedOrders
     )
 
-    .then(() => {
+    .then((response) => {
+      console.log(response.data);
       axios
         .delete(
           `https://shoppershop-bcc2c.firebaseio.com/products/${productName}/reviews/${reviewKey}.json?auth=${authToken}`
         )
-        .then(() => {
-          itemGetStarted();
+        .then((res) => {
+          console.log(res.data);
+          dispatch(itemGetStarted());
           dispatch(orderFetchStart(userId, authToken));
         });
     })

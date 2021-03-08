@@ -41,33 +41,33 @@ class WishList extends React.Component {
         console.log(item.id);
         return (
           <>
-            <Link
-              style={{ textDecoration: "none", color: "black" }}
-              to={{
-                pathname: `/item/${item.id}`,
-                state: {
-                  data: this.props.productData[item.productName],
-                  productName: item.productName,
-                },
-              }}
-            >
-              <div key={item.id} className={classes.card}>
-                <img className={classes.img} src={item.url} alt="Avatar" />
+            <div key={item.id} className={classes.card}>
+              <Link
+                style={{ textDecoration: "none", color: "black" }}
+                to={{
+                  pathname: `/item/${item.id}`,
+                  state: {
+                    data: this.props.productData[item.productName],
+                    productName: item.productName,
+                  },
+                }}
+              >
+                <img className={classes.img} src={item.url} alt="Avatar" />{" "}
+              </Link>
 
-                <div key={item.id} className={classes.container}>
-                  <h4>
-                    <b>{item.name}</b>
-                  </h4>
-                  <h4>Price: &#8377;{item.price}</h4>
-                  <button
-                    className={classes.buttonDelete}
-                    onClick={() => this.handleDeleteButton(key)}
-                  >
-                    Delete
-                  </button>
-                </div>
+              <div key={item.id} className={classes.container}>
+                <h4>
+                  <b>{item.name}</b>
+                </h4>
+                <h4>Price: &#8377;{item.price}</h4>
+                <button
+                  className={classes.buttonDelete}
+                  onClick={() => this.handleDeleteButton(key)}
+                >
+                  Delete
+                </button>
               </div>
-            </Link>
+            </div>
           </>
         );
       });

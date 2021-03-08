@@ -6,6 +6,7 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 
 const OrderListCardComponent = (props) => {
+  // const [productdata,setproductdata]=useState(props.productData);
   const [returnModal, setReturnModal] = useState(false);
   const [returnReasonValue, setReturnReasonValue] = useState({
     reason: "size is too small",
@@ -75,6 +76,7 @@ const OrderListCardComponent = (props) => {
       data.status,
       returnReasonValue
     );
+    returnModalOpenHandler();
   };
   const reviewSubmitHandler = (data) => {
     const userReview = {
@@ -82,6 +84,7 @@ const OrderListCardComponent = (props) => {
       rating: reviewFormData.rating,
       review: reviewFormData.review,
     };
+    // props.productData[key.productName]
     props.reviewHandler(
       props.list,
       reviewData.id,
@@ -120,6 +123,10 @@ const OrderListCardComponent = (props) => {
   const CancelHandler = (id, status) => {
     props.returnHandler(props.list, props.postId, id, status);
   };
+
+  //  for(item in props.productData[key.productName]){
+
+  //   }
 
   let page = <p>Loading...</p>;
   if (!props.loading) {
@@ -179,13 +186,20 @@ const OrderListCardComponent = (props) => {
                     </div>
                   </div>
                 )}
+
                 {key.orderStatus > 2 ? (
                   !key.reviewCheck ? (
-                    <button
-                      onClick={() => ReviewHandler(key.id, key.productName)}
-                    >
-                      Add a Review
-                    </button>
+                    !Object.values(
+                      props.productData[key.productName].reviews
+                    ).find((item) => item.name === props.email) ? (
+                      <button
+                        onClick={() => ReviewHandler(key.id, key.productName)}
+                      >
+                        Add a Review
+                      </button>
+                    ) : (
+                      <p>Review already added from other purchase</p>
+                    )
                   ) : (
                     <div>
                       <p>Review Already Added</p>
@@ -296,7 +310,6 @@ const OrderListCardComponent = (props) => {
               name="reason"
               onChange={onChangeHandler2}
               value={returnReasonValue.reason}
-              defaultValue={"size is too small"}
             >
               <option value="size is too small">SIZE IS TOO SMALL</option>
               <option value="size is too large">SIZE IS TOO LARGE</option>
