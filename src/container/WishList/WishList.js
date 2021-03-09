@@ -38,7 +38,7 @@ class WishList extends React.Component {
       console.log("yes!!");
       page = Object.keys(items).map((key) => {
         let item = items[key];
-        console.log(item.id);
+        console.log(item.productName);
         return (
           <>
             <div key={item.id} className={classes.card}>
@@ -52,9 +52,8 @@ class WishList extends React.Component {
                   },
                 }}
               >
-                <img className={classes.img} src={item.url} alt="Avatar" />{" "}
+                <img className={classes.img} src={item.url} alt="Avatar" />
               </Link>
-
               <div key={item.id} className={classes.container}>
                 <h4>
                   <b>{item.name}</b>

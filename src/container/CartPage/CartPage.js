@@ -7,6 +7,7 @@ import {
   checkoutPaymentStart,
 } from "../../redux/actions/actionCreator";
 import Modal from "components/Modal/Modal";
+import { Link } from "react-router-dom";
 
 class CartPage extends React.Component {
   state = {
@@ -53,7 +54,18 @@ class CartPage extends React.Component {
       list = this.props.items.map((item) => {
         return (
           <div key={item.id} className={classes.card}>
-            <img className={classes.img} src={item.url} alt="Avatar" />
+            <Link
+              style={{ textDecoration: "none", color: "black" }}
+              to={{
+                pathname: `/item/${item.id}`,
+                state: {
+                  data: this.props.productData[item.productName],
+                  productName: item.productName,
+                },
+              }}
+            >
+              <img className={classes.img} src={item.url} alt="Avatar" />
+            </Link>
 
             <div key={item.id} className={classes.container}>
               <h4>
@@ -91,13 +103,18 @@ class CartPage extends React.Component {
       totalList = this.props.items.map((item) => {
         return (
           <div key={item.id} className={classes.priceList_items}>
-            <div style={{ flex: "70%", justifyContent: "center" }}>
+            <div
+              style={{
+                flex: "70%",
+                justifyContent: "center",
+              }}
+            >
               {item.name} ({item.size})
             </div>
             <div style={{ flex: "30%", justifyContent: "center" }}>
               {item.price}
             </div>
-            <p>Quantity: {item.quantity}</p>
+            <span>Quantity:{item.quantity}</span>
           </div>
         );
       });
@@ -137,6 +154,7 @@ class CartPage extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
+  productData: state.item.data,
   items: state.cart.items,
   totalPrice: state.cart.totalPrice,
   isAuthenticated: state.auth.authToken !== null,

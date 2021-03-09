@@ -186,19 +186,27 @@ const OrderListCardComponent = (props) => {
                     </div>
                   </div>
                 )}
-
+                {console.log(props.productData)}
                 {key.orderStatus > 2 ? (
                   !key.reviewCheck ? (
-                    !Object.values(
-                      props.productData[key.productName].reviews
-                    ).find((item) => item.name === props.email) ? (
+                    props.productData[key.productName].reviews ? (
+                      !Object.values(
+                        props.productData[key.productName].reviews
+                      ).find((item) => item.name === props.email) ? (
+                        <button
+                          onClick={() => ReviewHandler(key.id, key.productName)}
+                        >
+                          Add a Review
+                        </button>
+                      ) : (
+                        <p>Review already added from other purchase</p>
+                      )
+                    ) : (
                       <button
                         onClick={() => ReviewHandler(key.id, key.productName)}
                       >
                         Add a Review
                       </button>
-                    ) : (
-                      <p>Review already added from other purchase</p>
                     )
                   ) : (
                     <div>

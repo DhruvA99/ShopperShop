@@ -15,9 +15,10 @@
 
 .img {
   border-radius: 5px 5px 0 0;
-  width: 30%;
+  width: 90%;
   height: 90%;
-  align-self: center;
+  margin: 10px;
+  max-width: 300px;
 }
 
 .container {
