@@ -65,7 +65,6 @@ export const CartItemCheck = () => (dispatch) => {
     localStorage.setItem("CartItems", JSON.stringify([]));
     localStorage.setItem("TotalPrice", JSON.stringify(0));
   } else {
-    console.log("cartitemcheckalreadypresent");
     let ls = JSON.parse(localStorage.getItem("CartItems"));
     let tp = parseInt(JSON.parse(localStorage.getItem("TotalPrice")));
     dispatch({ type: actionTypes.ADD_CART, payload: tp, ls: ls });
@@ -142,10 +141,11 @@ export const authStart = () => ({
   type: actionTypes.AUTH_START,
 });
 
-export const authSuccess = (authData, userId) => ({
+export const authSuccess = (authData, userId, email) => ({
   type: actionTypes.AUTH_SUCCESS,
   payload: authData,
   userId: userId,
+  email: email,
 });
 export const authFail = (error) => ({
   type: actionTypes.AUTH_FAIL,
@@ -168,12 +168,14 @@ export const authGetStarted = (email, password, isSignUp) => (dispatch) => {
   axios
     .post(url, authData)
     .then((res) => {
+      console.log(res);
       const expirationDate = new Date(
         new Date().getTime() + res.data.expiresIn * 1000
       );
       localStorage.setItem("token", res.data.idToken);
       localStorage.setItem("expirationDate", expirationDate);
       localStorage.setItem("userId", res.data.localId);
+      localStorage.setItem("email", res.data.email);
       dispatch(authSuccess(res.data.idToken, res.data.localId));
     })
     .catch((err) => {
@@ -188,6 +190,7 @@ export const errorClear = () => ({
 export const logout = () => (dispatch) => {
   localStorage.removeItem("token");
   localStorage.removeItem("userId");
+  localStorage.removeItem("email");
   localStorage.removeItem("expirationDate");
   dispatch({ type: actionTypes.AUTH_LOGOUT });
 };
@@ -208,7 +211,8 @@ export const checkAuthState = () => (dispatch) => {
       dispatch(logout());
     } else {
       const id = localStorage.getItem("userId");
-      dispatch(authSuccess(token, id));
+      const email = localStorage.getItem("email");
+      dispatch(authSuccess(token, id, email));
       dispatch(
         checkAuthTimeout((ExpDate.getTime() - new Date().getTime()) / 1000)
       );
@@ -319,11 +323,9 @@ export const orderFetchStart = (userId, authToken) => (dispatch) => {
     )
     .then((res) => {
       dispatch(orderFetchSuccess(res.data));
-      console.log("orderFetchStart called ", res.data);
     })
     .catch((err) => {
       dispatch(orderFetchFail(err.message));
-      console.log("orderFetchStartFail");
     });
 };
 
@@ -337,28 +339,143 @@ export const orderFetchFail = (error) => ({
   payload: error,
 });
 
-export const returnStart = (list, userId, authToken, postId, id, Status) => (
-  dispatch
-) => {
-  let updatedOrders = list.map((item) => {
-    if (item.id === id) {
-      return {
-        ...item,
-        status: Status,
-      };
-    }
-    return item;
-  });
+export const returnStart = (
+  list,
+  userId,
+  authToken,
+  postId,
+  id,
+  Status,
+  returnReason
+) => (dispatch) => {
+  let updatedOrders = [];
+  if (Status === "RETURN") {
+    updatedOrders = list.map((item) => {
+      if (item.id === id) {
+        return {
+          ...item,
+          status: Status,
+          returnReason: returnReason,
+        };
+      }
+      return item;
+    });
+  } else {
+    updatedOrders = list.map((item) => {
+      if (item.id === id) {
+        return {
+          ...item,
+          status: Status,
+          returnReason: {},
+        };
+      }
+      return item;
+    });
+  }
+  dispatch({ type: actionTypes.ORDER_START });
   axios
     .put(
       `https://shoppershop-bcc2c.firebaseio.com/orders/${userId}/${postId}/list.json?auth=${authToken}`,
       updatedOrders
     )
     .then((res) => {
-      console.log("returnStartSuccess");
       dispatch(orderFetchStart(userId, authToken));
     })
     .catch((error) => {
       console.log("returnStartError");
     });
+};
+
+export const AddReview = (
+  lists,
+  id,
+  postId,
+  userReview,
+  productName,
+  authToken,
+  userId
+) => (dispatch) => {
+  let updatedOrders = lists.map((item) => {
+    if (item.id === id) {
+      return {
+        ...item,
+        reviewCheck: true,
+      };
+    }
+    return item;
+  });
+  // let updatedReviews = { ...reviews, userReview };
+  dispatch({ type: actionTypes.ORDER_START });
+
+  axios
+    .post(
+      `https://shoppershop-bcc2c.firebaseio.com/products/${productName}/reviews.json?auth=${authToken}`,
+      userReview
+    )
+    .then((response) => {
+      axios
+        .put(
+          `https://shoppershop-bcc2c.firebaseio.com/orders/${userId}/${postId}/list.json?auth=${authToken}`,
+          updatedOrders
+        )
+        .then((res) => {
+          dispatch(itemGetStarted());
+          dispatch(orderFetchStart(userId, authToken));
+        });
+    })
+    .catch((err) => console.log(err.message));
+};
+
+// export const addReviewSuccess = () => ({});
+
+// export const addReviewFail = () => ({});
+
+export const RemoveReview = (
+  lists,
+  id,
+  postId,
+  productName,
+  authToken,
+  userId,
+  email,
+  reviews
+) => (dispatch) => {
+  let updatedOrders = lists.map((item) => {
+    if (item.id === id) {
+      return {
+        ...item,
+        reviewCheck: false,
+      };
+    }
+    return item;
+  });
+  let reviewKey = null;
+  for (let key in reviews) {
+    if (reviews[key].name === email) {
+      console.log(key);
+      reviewKey = key;
+      break;
+      // updatedReviews={...updatedReviews,[key]:reviews[key]}
+    }
+  }
+  dispatch({ type: actionTypes.ORDER_START });
+  axios
+    .put(
+      `https://shoppershop-bcc2c.firebaseio.com/orders/${userId}/${postId}/list.json?auth=${authToken}`,
+      updatedOrders
+    )
+
+    .then((response) => {
+      console.log(response.data);
+      axios
+        .delete(
+          `https://shoppershop-bcc2c.firebaseio.com/products/${productName}/reviews/${reviewKey}.json?auth=${authToken}`
+        )
+        .then((res) => {
+          console.log(res.data);
+          dispatch(itemGetStarted());
+          dispatch(orderFetchStart(userId, authToken));
+        });
+    })
+    .catch((err) => console.log(err.message));
 };

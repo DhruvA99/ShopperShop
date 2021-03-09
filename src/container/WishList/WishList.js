@@ -6,6 +6,7 @@ import {
   wishlistData,
   wishlistDeleteData,
 } from "../../redux/actions/actionCreator";
+import { Link } from "react-router-dom";
 
 class WishList extends React.Component {
   state = {};
@@ -37,23 +38,36 @@ class WishList extends React.Component {
       console.log("yes!!");
       page = Object.keys(items).map((key) => {
         let item = items[key];
+        console.log(item.productName);
         return (
-          <div key={item.id} className={classes.card}>
-            <img className={classes.img} src={item.url} alt="Avatar" />
-
-            <div key={item.id} className={classes.container}>
-              <h4>
-                <b>{item.name}</b>
-              </h4>
-              <h4>Price: &#8377;{item.price}</h4>
-              <button
-                className={classes.buttonDelete}
-                onClick={() => this.handleDeleteButton(key)}
+          <>
+            <div key={item.id} className={classes.card}>
+              <Link
+                style={{ textDecoration: "none", color: "black" }}
+                to={{
+                  pathname: `/item/${item.id}`,
+                  state: {
+                    data: this.props.productData[item.productName],
+                    productName: item.productName,
+                  },
+                }}
               >
-                Delete
-              </button>
+                <img className={classes.img} src={item.url} alt="Avatar" />
+              </Link>
+              <div key={item.id} className={classes.container}>
+                <h4>
+                  <b>{item.name}</b>
+                </h4>
+                <h4>Price: &#8377;{item.price}</h4>
+                <button
+                  className={classes.buttonDelete}
+                  onClick={() => this.handleDeleteButton(key)}
+                >
+                  Delete
+                </button>
+              </div>
             </div>
-          </div>
+          </>
         );
       });
     }
@@ -74,6 +88,7 @@ const mapStateToProps = (state) => ({
   authToken: state.auth.authToken,
   items: state.wishlist.items,
   userId: state.auth.userId,
+  productData: state.item.data,
   loading: state.wishlist.loading,
 });
 

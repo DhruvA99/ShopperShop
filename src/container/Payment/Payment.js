@@ -149,6 +149,7 @@ class Payment extends React.Component {
         return {
           ...key,
           orderStatus: 0,
+          reviewCheck: false,
         };
       }),
       cardDetails: {

@@ -6,22 +6,34 @@ import {
   deleteItemCart,
   checkoutPaymentStart,
 } from "../../redux/actions/actionCreator";
+import Modal from "components/Modal/Modal";
+import { Link } from "react-router-dom";
 
 class CartPage extends React.Component {
   state = {
     items: [],
+    deleteModalOpen: false,
     totalPrice: 0,
+    deleteModalData: { id: null, price: null },
   };
 
   componentDidMount() {
     this.setState({ items: this.props.items });
   }
 
+  handleDeleteModalOpen = () => {
+    this.setState((prevState) => ({
+      deleteModalOpen: !prevState.deleteModalOpen,
+    }));
+  };
+
   handleDeleteButton = (id, price) => {
-    console.log(price);
-    if (window.confirm("do you want to delete the selected item?")) {
-      this.props.deleteItemCart(id, price);
-    }
+    this.handleDeleteModalOpen();
+    this.setState({ deleteModalData: { id, price } }); //id:id,price:price
+  };
+  handleDeleteConfirm = (data) => {
+    this.props.deleteItemCart(data.id, data.price);
+    this.handleDeleteModalOpen();
   };
 
   paymentHandler = () => {
@@ -42,14 +54,25 @@ class CartPage extends React.Component {
       list = this.props.items.map((item) => {
         return (
           <div key={item.id} className={classes.card}>
-            <img className={classes.img} src={item.url} alt="Avatar" />
+            <Link
+              style={{ textDecoration: "none", color: "black" }}
+              to={{
+                pathname: `/item/${item.id}`,
+                state: {
+                  data: this.props.productData[item.productName],
+                  productName: item.productName,
+                },
+              }}
+            >
+              <img className={classes.img} src={item.url} alt="Avatar" />
+            </Link>
 
             <div key={item.id} className={classes.container}>
               <h4>
                 <b>{item.name}</b>
               </h4>
               <p>{item.size}</p>
-
+              <p>{item.productName}</p>
               <button
                 className={classes.buttonDelete}
                 onClick={() => this.handleDeleteButton(item.id, item.price)}
@@ -57,6 +80,19 @@ class CartPage extends React.Component {
                 Delete
               </button>
             </div>
+            <Modal
+              isOpen={this.state.deleteModalOpen}
+              openHandler={this.handleDeleteModalOpen}
+              submitButton={true}
+              isValid={true}
+              submitHandler={this.handleDeleteConfirm}
+              modalData={this.state.deleteModalData}
+              submitText="Confirm"
+            >
+              <div>
+                <h3>Do you want to delete the item from the cart?</h3>
+              </div>
+            </Modal>
           </div>
         );
       });
@@ -67,13 +103,18 @@ class CartPage extends React.Component {
       totalList = this.props.items.map((item) => {
         return (
           <div key={item.id} className={classes.priceList_items}>
-            <div style={{ flex: "70%", justifyContent: "center" }}>
+            <div
+              style={{
+                flex: "70%",
+                justifyContent: "center",
+              }}
+            >
               {item.name} ({item.size})
             </div>
             <div style={{ flex: "30%", justifyContent: "center" }}>
               {item.price}
             </div>
-            <p>Quantity: {item.quantity}</p>
+            <span>Quantity:{item.quantity}</span>
           </div>
         );
       });
@@ -113,6 +154,7 @@ class CartPage extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
+  productData: state.item.data,
   items: state.cart.items,
   totalPrice: state.cart.totalPrice,
   isAuthenticated: state.auth.authToken !== null,

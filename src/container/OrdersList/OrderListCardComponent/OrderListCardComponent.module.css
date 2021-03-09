@@ -44,3 +44,16 @@
 .green {
   color: green;
 }
+
+.Form {
+  display: flex;
+  flex-direction: column;
+}
+
+.FormSpan {
+  padding: 1em;
+}
+
+.formInput {
+  padding: 10px;
+}

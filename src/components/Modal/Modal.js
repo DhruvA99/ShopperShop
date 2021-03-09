@@ -9,6 +9,14 @@ const Modal = (props) => {
           &times;
         </span>
         <div>{props.children}</div>
+        {props.submitButton ? (
+          <button
+            disabled={!props.isValid}
+            onClick={() => props.submitHandler(props.modalData)}
+          >
+            {props.submitText}
+          </button>
+        ) : null}
       </div>
     </div>
   );

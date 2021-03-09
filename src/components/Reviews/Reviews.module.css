@@ -1,3 +1,15 @@
-.main {
+.main1 {
   margin-left: 20px;
+  margin-right: 10px;
+  padding: 1em;
+  border-bottom: 0.1px solid rgb(173, 182, 173);
+  background-color: white;
+}
+.main2 {
+  margin-left: 20px;
+  margin-right: 10px;
+  padding: 1em;
+  background-color: rgb(246, 249, 252);
+  border-bottom: 0.1px solid rgb(173, 182, 173);
+  /* border-bottom: 0.1px solid rgb(173, 182, 173); */
 }
