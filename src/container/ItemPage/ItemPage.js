@@ -267,7 +267,7 @@ class ItemPage extends React.Component {
             isOpen={this.state.cartModal}
             openHandler={this.onCartModalChangeHandler}
           >
-            <p>Order Added To your Cart!</p>
+            <p>Item Added To your Cart!</p>
           </Modal>
           <Footer />
         </div>

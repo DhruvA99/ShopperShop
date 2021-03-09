@@ -2,13 +2,10 @@ import React from "react";
 import classes from "./Advertisement.module.css";
 import { connect } from "react-redux";
 import Loader from "../../components/Loader/Loader";
-import { adGetStarted } from "../../redux/actions/actionCreator";
+
 import AdvertisementImage from "../../util/images/advertismentImage.jpg";
 
 class Advertisement extends React.Component {
-  componentDidMount() {
-    this.props.adGetStarted();
-  }
   render() {
     let page = <Loader />;
     if (!this.props.loading) {
@@ -30,10 +27,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => ({
-  adGetStarted: () => {
-    dispatch(adGetStarted());
-  },
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Advertisement);
+export default connect(mapStateToProps, null)(Advertisement);

@@ -152,7 +152,9 @@ const OrderListCardComponent = (props) => {
                 <p>Size: {key.size}</p>
                 <p>Item Price: {key.price}</p>
                 <p>Quantity: {key.quantity}</p>
-                {key.status === "CANCEL" ? null : <h4>{getTime()}</h4>}
+                {key.status === "CANCEL" ? null : key.orderStatus > 2 ? (
+                  <h4>{getTime()}</h4>
+                ) : null}
                 {key.status === "CANCEL" ? (
                   "CANCELLATION IS IN PROGRESS.DETAILS WILL BE SHARED SHORTLY WITH YOU"
                 ) : (
@@ -194,6 +196,7 @@ const OrderListCardComponent = (props) => {
                         props.productData[key.productName].reviews
                       ).find((item) => item.name === props.email) ? (
                         <button
+                          className={classes.ReviewAddButton}
                           onClick={() => ReviewHandler(key.id, key.productName)}
                         >
                           Add a Review
@@ -203,6 +206,7 @@ const OrderListCardComponent = (props) => {
                       )
                     ) : (
                       <button
+                        className={classes.ReviewAddButton}
                         onClick={() => ReviewHandler(key.id, key.productName)}
                       >
                         Add a Review
@@ -212,6 +216,7 @@ const OrderListCardComponent = (props) => {
                     <div>
                       <p>Review Already Added</p>
                       <button
+                        className={classes.ReviewRemoveButton}
                         onClick={() =>
                           reviewDeleteHandler(key.id, key.productName)
                         }

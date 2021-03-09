@@ -48,15 +48,17 @@ const Navbar = (props) => {
             <NavLink className={classes.item} to="/">
               HOME
             </NavLink>
-            <NavLink className={classes.item} to="/orders">
-              ORDERS
-            </NavLink>
-            <NavLink className={classes.item} to="/wishlist">
-              WISHLIST
-            </NavLink>
             <NavLink className={classes.item} to="/checkout">
               CART
             </NavLink>
+
+            <NavLink className={classes.item} to="/wishlist">
+              WISHLIST
+            </NavLink>
+            <NavLink className={classes.item} to="/orders">
+              ORDERS
+            </NavLink>
+
             <NavLink className={classes.item} to="/logout">
               LOGOUT
             </NavLink>
