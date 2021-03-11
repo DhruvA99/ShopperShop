@@ -30,13 +30,11 @@
 
 .orderStatus {
   display: flex;
-
-  justify-content: space-between;
 }
 .orderStatusItem {
   display: flex;
   flex-direction: column;
-  padding: 1px;
+  padding: 10px;
 }
 
 .red {
@@ -87,6 +85,9 @@
   .itemContainer {
     flex-direction: column;
   }
+  .itemsFlexBox {
+    padding: 10px;
+  }
   .ReviewAddButton {
     font-size: 1em;
     padding: 2px;
@@ -96,5 +97,8 @@
     font-size: 1em;
     padding: 2px;
     width: 70%;
+  }
+  .orderStatusItem {
+    padding: 4px;
   }
 }
