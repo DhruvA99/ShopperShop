@@ -130,7 +130,6 @@ class ItemPage extends React.Component {
     if (this.props.wishlistLoading && this.state.firstRender) {
       //this will only be executed once when loading is true and firstRender is set to true
       this.wishListDataCallHandler();
-      console.log("wishlist data call handler inside render ");
     }
     if (
       !this.props.wishlistLoading &&

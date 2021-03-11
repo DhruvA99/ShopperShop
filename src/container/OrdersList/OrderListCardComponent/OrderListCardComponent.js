@@ -188,7 +188,7 @@ const OrderListCardComponent = (props) => {
                     </div>
                   </div>
                 )}
-                {console.log(props.productData)}
+
                 {key.orderStatus > 2 ? (
                   !key.reviewCheck ? (
                     props.productData[key.productName].reviews ? (

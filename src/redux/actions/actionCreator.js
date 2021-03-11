@@ -85,8 +85,7 @@ export const addItemCart = (data, id) => (dispatch) => {
       return item;
     }
   });
-  console.log(checkLs);
-  console.log(check);
+
   if (check === true) {
     ls = [...checkLs];
   } else {
@@ -168,7 +167,6 @@ export const authGetStarted = (email, password, isSignUp) => (dispatch) => {
   axios
     .post(url, authData)
     .then((res) => {
-      console.log(res);
       const expirationDate = new Date(
         new Date().getTime() + res.data.expiresIn * 1000
       );
@@ -257,7 +255,6 @@ export const wishlistData = (userId, authToken) => (dispatch) => {
       `https://shoppershop-bcc2c.firebaseio.com/wishlist/${userId}.json?auth=${authToken}`
     )
     .then((res) => {
-      console.log("wishlistdata action called ");
       dispatch(wishlistSuccess(res.data));
     })
     .catch((err) => {

@@ -12,7 +12,6 @@ class WishList extends React.Component {
   state = {};
 
   componentDidMount() {
-    console.log("cdm");
     this.props.wishlistData(this.props.userId, this.props.authToken);
   }
 

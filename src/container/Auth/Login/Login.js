@@ -98,7 +98,6 @@ class Login extends React.Component {
                 <button
                   disabled={!this.state.isValid}
                   type="submit"
-                  onSubmit
                   className={classes.button}
                 >
                   LOGIN

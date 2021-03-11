@@ -30,11 +30,13 @@
 
 .orderStatus {
   display: flex;
+
   justify-content: space-between;
 }
 .orderStatusItem {
   display: flex;
   flex-direction: column;
+  padding: 1px;
 }
 
 .red {
@@ -76,4 +78,23 @@
   border-radius: 5px;
   background-color: rgb(126, 45, 13);
   margin: 5px 3px;
+}
+
+@media screen and (max-width: 786px) {
+  .main {
+    padding: 0.1em;
+  }
+  .itemContainer {
+    flex-direction: column;
+  }
+  .ReviewAddButton {
+    font-size: 1em;
+    padding: 2px;
+    width: 70%;
+  }
+  .ReviewRemoveButton {
+    font-size: 1em;
+    padding: 2px;
+    width: 70%;
+  }
 }
